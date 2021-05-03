@@ -1,0 +1,55 @@
+.homepage {
+  .feature-section {
+    padding: 50px 0;
+
+    .feature-item {
+      cursor: pointer;
+
+      .icon {
+        font-size: 45px;
+      }
+
+      .title {
+        margin-top: 15px;
+        margin-bottom: 15px;
+      }
+
+      &:hover {
+        .icon {
+          color: $red;
+        }
+      }
+    }
+  }
+
+  .bet-section {
+    padding: 50px 0;
+    // background-color: #f4f8f9;
+    background-color: #f2f2f2;
+
+    .bet-tab {
+      .nav-item .nav-link {
+        div.icon {
+          text-align: center;
+          color: #212529;
+
+          svg {
+            font-size: 42px;
+          }
+
+          span {
+            display: block;
+            margin-top: 8px;
+            text-transform: capitalize;
+          }
+        }
+
+        &.active {
+          div.icon {
+            color: $red;
+          }
+        }
+      }
+    }
+  }
+}

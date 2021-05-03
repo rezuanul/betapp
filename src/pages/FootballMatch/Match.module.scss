@@ -1,0 +1,26 @@
+@import '../../assets/styles/theme/vars';
+
+.statsUl {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.statsLi {
+  display: table-row;
+}
+
+.th,
+.td {
+  display: table-cell;
+  padding: 10px;
+  border-bottom: 1px solid #ebebeb;
+  word-wrap: break-word;
+}
+
+.th {
+  width: 40%;
+}
