@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { useHistory } from 'react-router-dom';
-import { useFormik } from 'formik';
+import { useFormik, yupToFormErrors } from 'formik';
 import * as yup from 'yup';
 
 import Input from '../../components/form/Input';
 import Label from '../../components/form/Label';
 import Textarea from '../../components/form/Textarea';
-import PageCover from '../../components/Layout/PageCover';
+import Select from '../../components/form/Select';
 
 export default function CreateBet() {
   const history = useHistory();
@@ -18,21 +18,59 @@ export default function CreateBet() {
   const handleShow = () => setShow(true);
   const handleRedirect = () => {
     setShow(false);
-    history.push('/match/football');
+    history.push('/event');
   };
 
+  const countryOptions = [
+    { value: 0, label: 'Switzerland' },
+    { value: 1, label: 'Finland' },
+    { value: 2, label: 'India' },
+  ];
+
+  const countryOptionsArray = [];
+  countryOptions.map(option =>
+    countryOptionsArray.push(<option label={option.label} value={option.value} key={option.value}></option>)
+  );
+
+
+  const categoryOptions = [
+    { value: 0, label: 'Other' },
+    { value: 1, label: 'Football' },
+    { value: 2, label: 'Ice hockey' },
+  ];
+
+  const categoryOptionsArray = [];
+  categoryOptions.map(option =>
+    categoryOptionsArray.push(<option label={option.label} value={option.value} key={option.value}></option>)
+  );
+
   const initialValues = {
-    description: '',
-    amount: '',
-    publicId: '',
-    privateKey: '',
+    event: '',
+    startDate: new Date().toISOString().slice(0, 10),
+    startTime: '',
+    creatorBet: 'Home wins',
+    country: 0,
+    category: 2,
+    stake: 1000000000000000000,
+    odd: 2000000,
+    timeToVote: 84000,
   };
 
   const validationSchema = yup.object().shape({
-    description: yup.string().required('Description is required'),
-    amount: yup.string().required('Amount is required'),
-    publicId: yup.string().required('Public ID is required'),
-    privateKey: yup.string().required('Private Key is required'),
+    event: yup.string().required('Event description is required')
+      .max(80, 'Event description max length 80 characters!'),
+    startDate: yup.date().required()
+      .min(new Date().toISOString().slice(0, 10), "Date cannot be in the past!"),
+    creatorBet: yup.string().required('Event description is required')
+      .max(80, 'Event description max length 80 characters!'),
+    stake: yup.number().min(1000000, 'Stake has to be bigger than 1000000')
+      .required(),
+    country: yup.string().required(),
+    league: yup.string().required(),
+    category: yup.string().required(),
+    odd: yup.number().min(1000001, 'Odd has to be bigger than 1000000')
+      .required(),
+    timeToVote: yup.number().min(84000, 'Time to vote should be atleast one day!')
   });
 
   const onSubmit = () => {
@@ -48,20 +86,10 @@ export default function CreateBet() {
 
   return (
     <>
-      <PageCover leagueName="La Liga" team1="Barcelona" team2="Real Madrid" />
-
       <div className="mt-5 container">
         <div className="row justify-content-center">
           <div className="col-lg-8">
-            <h3>Create Bet</h3>
-
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </p>
-
-            <hr />
+            <h3>Create a Bet</h3>
           </div>
         </div>
 
@@ -69,53 +97,126 @@ export default function CreateBet() {
           <div className="col-lg-8">
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="event">Event</Label>
                 <Textarea
-                  name="description"
-                  id="description"
+                  name="event"
+                  id="event"
                   onChange={handleChange}
-                  value={values.description}
-                  error={errors.description}
-                  touched={touched.description}
+                  value={values.event}
+                  error={errors.event}
+                  touched={touched.event}
+                />
+              </div>
+
+
+              <div className="form-group">
+                <Label htmlFor="startDate">Event start date</Label>
+                <Input
+                  type="date"
+                  name="startDate"
+                  id="startDate"
+                  onChange={handleChange}
+                  value={values.startDate}
+                  error={errors.startDate}
+                  touched={touched.stastartDateke}
+                  min={values.startDate}
                 />
               </div>
 
               <div className="form-group">
-                <Label htmlFor="bet-amount">Bet Amount</Label>
+                <Label htmlFor="startTime">Event start time (UTC)</Label>
+                <Input
+                  type="time"
+                  name="startTime"
+                  id="startTime"
+                  onChange={handleChange}
+                  value={values.startTime}
+                  error={errors.startTime}
+                  touched={touched.stastartTimeke}
+                />
+              </div>
+
+              <div className="form-group">
+                <Label htmlFor="creatorBet">Your bet</Label>
+                <Textarea
+                  name="creatorBet"
+                  id="creatorBet"
+                  onChange={handleChange}
+                  value={values.creatorBet}
+                  error={errors.creatorBet}
+                  touched={touched.creatorBet}
+                />
+              </div>
+
+              <div className="form-group">
+                <Label htmlFor="country">Country</Label>
+                <Select
+                  type='select'
+                  error={errors.country}
+                  onChange={handleChange}
+                  touched={touched.country}
+                  name='country'
+                  id='country'
+                  className='select'
+                  children={countryOptionsArray}
+                  value={values.country}
+                />
+              </div>
+
+              <div className="form-group">
+                <Label htmlFor="category">Category</Label>
+                <Select
+                  type='select'
+                  error={errors.country}
+                  onChange={handleChange}
+                  touched={touched.country}
+                  name='category'
+                  id='category'
+                  className='select'
+                  children={categoryOptionsArray}
+                  value={values.category}
+                />
+              </div>
+
+
+              <div className="form-group">
+                <Label htmlFor="stake">Stake</Label>
                 <Input
                   type="number"
-                  name="amount"
-                  id="bet-amount"
+                  name="stake"
+                  id="stake"
                   onChange={handleChange}
-                  value={values.amount}
-                  error={errors.amount}
-                  touched={touched.amount}
+                  value={values.stake}
+                  error={errors.stake}
+                  touched={touched.stake}
                 />
               </div>
 
+
               <div className="form-group">
-                <Label htmlFor="ether-public-id">Ether Public Id</Label>
+                <Label htmlFor="odd">Your Odd</Label>
                 <Input
-                  type="text"
-                  name="publicId"
-                  id="ether-public-id"
+                  type="number"
+                  name="odd"
+                  id="odd"
                   onChange={handleChange}
-                  value={values.publicId}
-                  error={errors.publicId}
-                  touched={touched.publicId}
+                  value={values.odd}
+                  error={errors.odd}
+                  touched={touched.odd}
                 />
+                <Label htmlFor="odd">Backer Odd: {values.odd > 1000000 && 1 / (1 - (1000000 / values.odd))}</Label>
               </div>
 
               <div className="form-group">
-                <Label htmlFor="ether-private-id">Ether Private Id</Label>
+                <Label htmlFor="timeToVote">Time to vote (In seconds)</Label>
                 <Input
-                  type="password"
-                  name="privateKey"
-                  id="ether-private-id"
+                  type="number"
+                  name="timeToVote"
+                  id="timeToVote"
                   onChange={handleChange}
-                  value={values.privateKey}
-                  error={errors.privateKey}
-                  touched={touched.privateKey}
+                  value={values.timeToVote}
+                  error={errors.timeToVote}
+                  touched={touched.timeToVote}
                 />
               </div>
 

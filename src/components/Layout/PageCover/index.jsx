@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 import styles from './Cover.module.scss';
 
-export default function index({ leagueName, team1, team2 }) {
+export default function index({ country, category, description }) {
   return (
     <div>
       <div
@@ -13,12 +13,11 @@ export default function index({ leagueName, team1, team2 }) {
         )}
       >
         <div>
-          <h1>{leagueName}</h1>
+          <h1>{description}</h1>
+          <h2>{country}</h2>
+          <h3>{category}</h3>
         </div>
         <div>
-          <p>
-            {team1} VS {team2}
-          </p>
         </div>
       </div>
     </div>
