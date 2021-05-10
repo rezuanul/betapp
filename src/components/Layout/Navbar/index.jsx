@@ -15,13 +15,6 @@ export default function Navbar() {
       showForLoggedIn: true,
       showForLoggedOut: true,
     },
-    {
-      key: 3,
-      text: 'Login',
-      route: '/auth/login',
-      showForLoggedIn: false,
-      showForLoggedOut: true,
-    },
   ];
 
   return (
