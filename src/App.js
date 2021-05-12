@@ -11,6 +11,7 @@ import CreateBet from './pages/CreateBet';
 import GambleBoard from './abis/GambleBoard.json'
 import Web3 from 'web3'
 
+
 const CONTRACT_ADDRESS = "0x2E6318CC9006f132265fDBf9F68569172101Bb6f";
 
 function App() {
@@ -30,9 +31,24 @@ function App() {
   // Connect Metamask automatically
   const [account, setAccount] = useState(0);
 
+  const [filters, setFilters] = useState({
+    country: null,
+    category: null,
+    league: null,
+  })
+
   useEffect(() => {
     getAccount();
-  }, [account]);
+    return () => window.ethereum.removeListener("accountsChanged", handleAccountsChanged);
+  }, [account, handleAccountsChanged]);
+
+  async function handleAccountsChanged(accounts) {
+    if (accounts.length === 0) {
+      alert("Sign in to Metamask to use the app!")
+    } else if (accounts[0] !== account) {
+      setAccount(accounts[0])
+    }
+  }
 
   const getAccount = useCallback(async () => {
     if (window.ethereum) {
@@ -50,12 +66,8 @@ function App() {
     } else {
       alert("Please install metamask!")
     }
-    window.ethereum.on("accountsChanged", function (accounts) {
-      setAccount(accounts[0]);
-      console.log(accounts[0])
-    });
+    window.ethereum.on("accountsChanged", handleAccountsChanged);
   }, [account]);
-
   ///////////////////////////////////////////////////
   ///////////////////////////////////////////////////
 
@@ -65,7 +77,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={Homepage} />
         <Route exact path="/event" component={Event} />
-        <Route exact path="/create-bet" component={CreateBet} />
+        <Route exact path="/create-bet" render={props => <CreateBet web3={web3} contract={contract} account={account} setAccount={setAccount}  filters={filters} setFilters={setFilters} />} />
       </Switch>
       <Footer />
     </div>
