@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import BetTable from '../../components/BetTable';
-import styles from './Match.module.scss';
 import PageCover from '../../components/Layout/PageCover';
 
 export default function Event() {

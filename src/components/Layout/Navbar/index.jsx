@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-export default function Navbar() {
+export default function Navbar(connectMetamaskHandler) {
   const location = useLocation();
 
   const getActiveRouteClass = (path) => (location.pathname === path ? 'active' : '');

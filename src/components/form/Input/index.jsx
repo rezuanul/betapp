@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-export default function Input({ type, name, id, error, touched, className, ...restProps }) {
+export default function Input({ type, name, id, error, touched, className, dataList, autoCompleteOptions, ...restProps }) {
   return (
     <>
       <input
@@ -12,8 +12,12 @@ export default function Input({ type, name, id, error, touched, className, ...re
         })}
         id={id}
         name={name}
+        list="autocompletelist"
         {...restProps}
       />
+      <datalist id="autocompletelist">
+        {autoCompleteOptions}
+      </datalist>
       {touched && error && <div className="text-danger">{error}</div>}
     </>
   );

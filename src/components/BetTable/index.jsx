@@ -1,6 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { BiFootball } from 'react-icons/bi';
 
 export default function BetTable() {
     const data = [1, 2, 3, 4, 5, 6, 7, 8].map(() => ({

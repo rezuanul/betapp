@@ -1,6 +1,6 @@
 import React, { useState, Button } from 'react';
 import Nav from 'react-bootstrap/Nav';
-import { GiClick, GiCricketBat, GiTennisRacket } from 'react-icons/gi';
+import { GiCricketBat, GiTennisRacket } from 'react-icons/gi';
 import { BiTrophy, BiFootball, BiBasketball, BiBaseball } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 

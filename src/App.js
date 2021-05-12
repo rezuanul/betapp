@@ -11,17 +11,23 @@ import CreateBet from './pages/CreateBet';
 import GambleBoard from './abis/GambleBoard.json'
 import Web3 from 'web3'
 
-const contractAdress = "0x2E6318CC9006f132265fDBf9F68569172101Bb6f";
+const CONTRACT_ADDRESS = "0x2E6318CC9006f132265fDBf9F68569172101Bb6f";
 
 function App() {
 
+  ///////////////////////////////////////////////////
+  ///////////////////////////////////////////////////
+  //Initialize used clients
   const web3 = new Web3(window.ethereum);
 
   const contract = new web3.eth.Contract(
     GambleBoard,
-    contractAdress
+    CONTRACT_ADDRESS
   );
 
+  ///////////////////////////////////////////////////
+  ///////////////////////////////////////////////////
+  // Connect Metamask automatically
   const [account, setAccount] = useState(0);
 
   useEffect(() => {
@@ -50,6 +56,8 @@ function App() {
     });
   }, [account]);
 
+  ///////////////////////////////////////////////////
+  ///////////////////////////////////////////////////
 
   return (
     <div className="d-flex flex-column" style={{ height: '100vh' }}>

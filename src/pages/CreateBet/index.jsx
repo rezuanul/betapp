@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { useHistory } from 'react-router-dom';
-import { useFormik, yupToFormErrors } from 'formik';
+import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 import Input from '../../components/form/Input';
@@ -10,9 +10,23 @@ import Label from '../../components/form/Label';
 import Textarea from '../../components/form/Textarea';
 import Select from '../../components/form/Select';
 
-export default function CreateBet() {
+import { useQuery, gql } from '@apollo/client';
+
+import { countryOptions, categoryOptions } from '../../const/filterMappings'
+
+const LEAGUES_QUERY = gql`
+  query getLeagues {
+    events(where: {category: 12, country: 186}) {
+      league
+    }
+  }
+`;
+
+export default function CreateBet(web3, contract) {
   const history = useHistory();
   const [show, setShow] = useState(false);
+  
+  const { loading, error, data } = useQuery(LEAGUES_QUERY);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -21,28 +35,26 @@ export default function CreateBet() {
     history.push('/event');
   };
 
-  const countryOptions = [
-    { value: 0, label: 'Switzerland' },
-    { value: 1, label: 'Finland' },
-    { value: 2, label: 'India' },
-  ];
-
   const countryOptionsArray = [];
   countryOptions.map(option =>
     countryOptionsArray.push(<option label={option.label} value={option.value} key={option.value}></option>)
   );
 
-
-  const categoryOptions = [
-    { value: 0, label: 'Other' },
-    { value: 1, label: 'Football' },
-    { value: 2, label: 'Ice hockey' },
-  ];
-
   const categoryOptionsArray = [];
   categoryOptions.map(option =>
     categoryOptionsArray.push(<option label={option.label} value={option.value} key={option.value}></option>)
   );
+
+  let leagueAutocompleteOptions = [];
+
+  const updateLeagueAutoCompleteOptions = async () => {
+    if (!loading && !error) {
+      leagueAutocompleteOptions = [];
+      data.events.map(event => 
+        leagueAutocompleteOptions.push(<option value={event.league}></option>)  
+      );
+    }
+  }
 
   const initialValues = {
     event: '',
@@ -51,6 +63,7 @@ export default function CreateBet() {
     creatorBet: 'Home wins',
     country: 0,
     category: 2,
+    league: 'NHL',
     stake: 1000000000000000000,
     odd: 2000000,
     timeToVote: 84000,
@@ -61,12 +74,13 @@ export default function CreateBet() {
       .max(80, 'Event description max length 80 characters!'),
     startDate: yup.date().required()
       .min(new Date().toISOString().slice(0, 10), "Date cannot be in the past!"),
+    startTime: yup.string().required(),
     creatorBet: yup.string().required('Event description is required')
       .max(80, 'Event description max length 80 characters!'),
     stake: yup.number().min(1000000, 'Stake has to be bigger than 1000000')
       .required(),
     country: yup.string().required(),
-    league: yup.string().required(),
+    league: yup.string().max(30, "League max length 30 characters!"),
     category: yup.string().required(),
     odd: yup.number().min(1000001, 'Odd has to be bigger than 1000000')
       .required(),
@@ -118,7 +132,7 @@ export default function CreateBet() {
                   onChange={handleChange}
                   value={values.startDate}
                   error={errors.startDate}
-                  touched={touched.stastartDateke}
+                  touched={touched.startDate}
                   min={values.startDate}
                 />
               </div>
@@ -132,13 +146,26 @@ export default function CreateBet() {
                   onChange={handleChange}
                   value={values.startTime}
                   error={errors.startTime}
-                  touched={touched.stastartTimeke}
+                  touched={touched.startTime}
                 />
               </div>
 
               <div className="form-group">
                 <Label htmlFor="creatorBet">Your bet</Label>
                 <Textarea
+                  name="creatorBet"
+                  id="creatorBet"
+                  onChange={handleChange}
+                  value={values.creatorBet}
+                  error={errors.creatorBet}
+                  touched={touched.creatorBet}
+                />
+              </div>
+
+              <div className="form-group">
+                <Label htmlFor="creatorBet">Your Bet</Label>
+                <Input
+                  type="text"
                   name="creatorBet"
                   id="creatorBet"
                   onChange={handleChange}
@@ -167,9 +194,9 @@ export default function CreateBet() {
                 <Label htmlFor="category">Category</Label>
                 <Select
                   type='select'
-                  error={errors.country}
+                  error={errors.category}
                   onChange={handleChange}
-                  touched={touched.country}
+                  touched={touched.category}
                   name='category'
                   id='category'
                   className='select'
@@ -178,6 +205,19 @@ export default function CreateBet() {
                 />
               </div>
 
+              <div className="form-group">
+                <Label htmlFor="league">League</Label>
+                <Input
+                  type="text"
+                  name="league"
+                  id="league"
+                  onChange={handleChange}
+                  value={values.league}
+                  error={errors.league}
+                  touched={touched.league}
+                  autoCompleteOptions={leagueAutocompleteOptions}
+                />
+              </div>
 
               <div className="form-group">
                 <Label htmlFor="stake">Stake</Label>
