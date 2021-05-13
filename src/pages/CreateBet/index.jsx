@@ -33,7 +33,7 @@ categoryOptions.map(option =>
   categoryOptionsArray.push(<option label={option.label} value={option.value} key={option.value}></option>)
 );
 
-export default function CreateBet({ web3, contract, account, setAccount, filters, setFilters }) {
+export default function CreateBet({ web3, betContract, account, setAccount, filters, setFilters }) {
   const history = useHistory();
   const [show, setShow] = useState(false);
   const [creationSuccess, setSuccess] = useState(false);
@@ -83,12 +83,12 @@ export default function CreateBet({ web3, contract, account, setAccount, filters
       .max(80, 'Event description max length 80 characters!'),
     startDate: yup.date().required()
       .min(new Date(Date.now()).toISOString().slice(0, 10), "Date cannot be in the past!"),
-    startTime: yup.string().required(), /// TODO Add check for time if date is today                FieldB: Yup.string()
+    startTime: yup.string().required(), /// TODO Add check for time if date is today           FieldB: Yup.string()
     creatorBet: yup.string().required('Event description is required')                       //   .when('FieldA', {
       .max(80, 'Event description max length 80 characters!'),                               //       is: (FieldA) => FieldA.length > 0,
     stake: yup.number().min(1000000, 'Stake has to be bigger than 1000000')                  //       then: Yup.string()
       .required(),                                                                           //    .required('Field is required')            
-    country: yup.string().required(),                                                        // })
+    country: yup.string().required(),                                                        //})
     league: yup.string().max(30, "League max length 30 characters!"),
     category: yup.string().required(),
     odd: yup.number().min(1000001, 'Odd has to be bigger than 1000000')
@@ -106,7 +106,7 @@ export default function CreateBet({ web3, contract, account, setAccount, filters
     let [year, month, day] = formikForm.values.startDate.split("-");
     let [hours, minutes] = formikForm.values.startTime.split(":");
     let dateTimeAsUTC = Date.UTC(year, (parseInt(month) - 1).toString(), day, hours, minutes);
-    contract.methods
+    betContract.methods
             .createBet(formikForm.values.event,
                        formikForm.values.creatorBet, 
                        formikForm.values.league,

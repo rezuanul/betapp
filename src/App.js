@@ -9,10 +9,12 @@ import Homepage from './pages/Homepage';
 import Event from './pages/Event';
 import CreateBet from './pages/CreateBet';
 import GambleBoard from './abis/GambleBoard.json'
+import Arbitrator from './abis/Arbitrator.json'
 import Web3 from 'web3'
 
 
-const CONTRACT_ADDRESS = "0x2E6318CC9006f132265fDBf9F68569172101Bb6f";
+const BET_CONTRACT_ADDRESS = "0x2E6318CC9006f132265fDBf9F68569172101Bb6f";
+const ARBITRATOR_CONTRACT_ADDRESS = "0xB767De12E3c01F31a437Edc69016D4d6E09bcc68"
 
 function App() {
 
@@ -21,10 +23,15 @@ function App() {
   //Initialize used clients
   const web3 = new Web3(window.ethereum);
 
-  const contract = new web3.eth.Contract(
+  const betContract = new web3.eth.Contract(
     GambleBoard,
-    CONTRACT_ADDRESS
+    BET_CONTRACT_ADDRESS
   );
+
+  const arbitratorContract = new web3.eth.Contract(
+    Arbitrator,
+    ARBITRATOR_CONTRACT_ADDRESS
+  )
 
   ///////////////////////////////////////////////////
   ///////////////////////////////////////////////////
@@ -77,7 +84,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={Homepage} />
         <Route exact path="/event" component={Event} />
-        <Route exact path="/create-bet" render={props => <CreateBet web3={web3} contract={contract} account={account} setAccount={setAccount}  filters={filters} setFilters={setFilters} />} />
+        <Route exact path="/create-bet" render={props => <CreateBet web3={web3} betContract={betContract} account={account} setAccount={setAccount}  filters={filters} setFilters={setFilters} />} />
       </Switch>
       <Footer />
     </div>
