@@ -12,7 +12,9 @@ import Select from '../../components/form/Select';
 
 import { useQuery, gql } from '@apollo/client';
 
-import { countryOptions, categoryOptions } from '../../const/filterMappings'
+// for filters
+import { categoryOptionsArray, countryOptionsArray } from '../../const/filterMappings'
+import genMetaEvidence from '../../interaction/genMetaEvidence'
 
 
 const LEAGUES_QUERY = gql`
@@ -23,17 +25,7 @@ const LEAGUES_QUERY = gql`
   }
 `;
 
-const countryOptionsArray = [];
-countryOptions.map(option =>
-  countryOptionsArray.push(<option label={option.label} value={option.value} key={option.value}></option>)
-);
-
-const categoryOptionsArray = [];
-categoryOptions.map(option =>
-  categoryOptionsArray.push(<option label={option.label} value={option.value} key={option.value}></option>)
-);
-
-export default function CreateBet({ web3, betContract, account, setAccount, filters, setFilters }) {
+export default function CreateBet({ web3, betContract, account, setAccount, filters, setFilters, archon, ipfsClient }) {
   const history = useHistory();
   const [show, setShow] = useState(false);
   const [creationSuccess, setSuccess] = useState(false);
@@ -96,7 +88,7 @@ export default function CreateBet({ web3, betContract, account, setAccount, filt
     timeToVote: yup.number().min(86401, 'Time to vote should be over one day!')
   });
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     setCreating(true);
     setShow(true);
     setFilters({
@@ -106,6 +98,13 @@ export default function CreateBet({ web3, betContract, account, setAccount, filt
     let [year, month, day] = formikForm.values.startDate.split("-");
     let [hours, minutes] = formikForm.values.startTime.split(":");
     let dateTimeAsUTC = Date.UTC(year, (parseInt(month) - 1).toString(), day, hours, minutes);
+
+    let metaEvidence = genMetaEvidence(account, '', formikForm.values.event, formikForm.values.creatorBet);
+    let fileObject = {content: JSON.stringify(metaEvidence)};
+
+    // let result = await ipfsClient.add(fileObject);
+    // console.info(result);
+
     betContract.methods
             .createBet(formikForm.values.event,
                        formikForm.values.creatorBet, 

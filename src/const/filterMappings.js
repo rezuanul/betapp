@@ -1,4 +1,4 @@
-export const categoryOptions = [
+const categoryOptions = [
     { value: 0, label: 'Other' },
     { value: 1, label: 'Aikido' },
     { value: 2, label: 'Archery' },
@@ -20,7 +20,7 @@ export const categoryOptions = [
     { value: 18, label: 'Weightlifting' },
 ];
 
-export const countryOptions = [
+const countryOptions = [
     { value: 0, label: 'Afghanistan' },
     { value: 1, label: 'Albania' },
     { value: 2, label: 'Algeria' },
@@ -226,3 +226,13 @@ export const countryOptions = [
     { value: 202, label: 'Africa' },
     { value: 203, label: 'Australia' },
 ];
+
+export const countryOptionsArray = [];
+countryOptions.map(option =>
+  countryOptionsArray.push(<option label={option.label} value={option.value} key={option.value}></option>)
+);
+
+export const categoryOptionsArray = [];
+categoryOptions.map(option =>
+  categoryOptionsArray.push(<option label={option.label} value={option.value} key={option.value}></option>)
+);
