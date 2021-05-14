@@ -50,7 +50,7 @@ export default function BetTable() {
                                 <div className="col px-2">
                                     <button className="btn btn-danger btn-block">
                                         Back Bet
-                </button>
+                                    </button>
                                 </div>
                             </td>
                         </tr>

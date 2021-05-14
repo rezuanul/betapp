@@ -99,11 +99,16 @@ export default function CreateBet({ web3, betContract, account, setAccount, filt
     let [hours, minutes] = formikForm.values.startTime.split(":");
     let dateTimeAsUTC = Date.UTC(year, (parseInt(month) - 1).toString(), day, hours, minutes);
 
-    let metaEvidence = genMetaEvidence(account, '', formikForm.values.event, formikForm.values.creatorBet);
+    let metaEvidence = genMetaEvidence(account, '', formikForm.values.event + ' ' + new Date(dateTimeAsUTC).toISOString().slice(0, 10), formikForm.values.creatorBet);
     let fileObject = {content: JSON.stringify(metaEvidence)};
 
-    // let result = await ipfsClient.add(fileObject);
-    // console.info(result);
+    let result;
+    try {
+      result = await ipfsClient.add(fileObject);
+    } catch {
+      handleBetCreated();
+      return
+    }
 
     betContract.methods
             .createBet(formikForm.values.event,
@@ -113,7 +118,7 @@ export default function CreateBet({ web3, betContract, account, setAccount, filt
                        formikForm.values.category,
                        dateTimeAsUTC.toString().slice(0, -3),
                        formikForm.values.timeToVote,
-                       formikForm.values.odd)
+                       formikForm.values.odd, '/ipfs/' + result.path)
             .send({from: account, value: formikForm.values.stake})
             .then((res) => handleBetCreated(), (res) => handleRejected())
   };
