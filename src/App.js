@@ -29,7 +29,7 @@ function App() {
     GambleBoard,
     BET_CONTRACT_ADDRESS
   );
-  
+
   // For arbitration fee
   const arbitratorContract = new web3.eth.Contract(
     Arbitrator,
@@ -106,9 +106,9 @@ function App() {
           setAccount={setAccount}
           filters={filters}
           setFilters={setFilters}
-          archon={archon} 
+          archon={archon}
           ipfsClient={ipfsClient}
-           />} />
+        />} />
       </Switch>
       <Footer />
     </div>

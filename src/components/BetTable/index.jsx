@@ -1,4 +1,5 @@
 import React from 'react';
+import { GiContract } from 'react-icons/gi';
 
 export default function BetTable() {
     const data = [1, 2, 3, 4, 5, 6, 7, 8].map(() => ({
@@ -48,8 +49,20 @@ export default function BetTable() {
                             </td>
                             <td>
                                 <div className="col px-2">
-                                    <button className="btn btn-danger btn-block">
+                                    <button id="backBet" className="btn btn-danger btn-block">
                                         Back Bet
+                                    </button>
+                                    <button id="layerWins" className="btn btn-danger btn-block">
+                                        Layer wins
+                                    </button>
+                                    <button id="backerWins"  className="btn btn-danger btn-block">
+                                        Backer wins
+                                    </button>
+                                    <button id="dispute" className="btn btn-danger btn-block">
+                                        Dispute
+                                    </button>
+                                    <button refund="refund" onClick="" className="btn btn-danger btn-block">
+                                        Refund
                                     </button>
                                 </div>
                             </td>
