@@ -5,9 +5,31 @@ import { BiTrophy, BiFootball, BiBasketball, BiBaseball } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 
 import EventTable from '../../components/EventTable';
+import { useQuery, gql } from '@apollo/client';
 
-export default function Homepage() {
+const EVENTS_QUERY = gql`
+  query getEvents($country: Int, $category: Int) {
+    events(where: {category: $category}) {
+      id
+      description
+      startTime
+      league
+      category
+      country
+      bets {
+        id
+      }
+  }
+}
+`;
+
+export default function Homepage(account, filters, setFilters) {
   const [activeTab, setActiveTab] = useState('link-1');
+
+  const { loading, error, data, refetch } = useQuery(EVENTS_QUERY, {
+    variables: { country: 186, category: 12 },
+    notifyOnNetworkStatusChange: true
+  });
 
   return (
     <div className="homepage">
@@ -17,10 +39,6 @@ export default function Homepage() {
             <div className="col-lg-6">
               <div className="text-center">
                 <h2 className="text-primary">Bet & Play Now</h2>
-                <p className="text-muted">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                  incididunt
-                </p>
               </div>
             </div>
           </div>
@@ -85,7 +103,7 @@ export default function Homepage() {
                   </Nav.Item>
                 </Nav>
 
-                <EventTable />
+                <EventTable betData={data && { data }} />
               </div>
             </div>
           </div>

@@ -97,13 +97,23 @@ function App() {
     <div className="d-flex flex-column" style={{ height: '100vh' }}>
       <Navbar />
       <Switch>
-        <Route exact path="/" component={Homepage} />
-        <Route exact path="/event" component={Event} />
+        <Route exact path="/" render={props => <Homepage
+          account={account}
+          filters={filters}
+          setFilters={setFilters}
+        />} />
+        <Route exact path="/event" render={props => <Event
+          betContract={betContract}
+          account={account}
+          filters={filters}
+          setFilters={setFilters}
+          archon={archon}
+          ipfsClient={ipfsClient}
+        />} />
         <Route exact path="/create-bet" render={props => <CreateBet
           web3={web3}
           betContract={betContract}
           account={account}
-          setAccount={setAccount}
           filters={filters}
           setFilters={setFilters}
           archon={archon}

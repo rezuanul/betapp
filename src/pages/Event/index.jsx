@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import BetTable from '../../components/BetTable';
 import PageCover from '../../components/Layout/PageCover';
 
-export default function Event() {
+export default function Event({ betContract, account, filters, setFilters, archon, ipfsClient }) {
   return (
     <div>
       <PageCover description="Barcelona vs Real Madrid" category="Football" country="Spain" />
@@ -19,7 +19,7 @@ export default function Event() {
         </div>
 
         <div className="row">
-          <BetTable />
+          <BetTable account={account} betContract={betContract} />
         </div>
       </div>
     </div>

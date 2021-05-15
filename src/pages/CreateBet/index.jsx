@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner'
+import Spinner from 'react-bootstrap/Spinner';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -10,29 +10,32 @@ import Input from '../../components/form/Input';
 import Label from '../../components/form/Label';
 import Select from '../../components/form/Select';
 
+// for filters
+import { categoryOptionsArray, countryOptionsArray } from '../../const/filterMappings';
+import genMetaEvidence from '../../interaction/genMetaEvidence';
+
 import { useQuery, gql } from '@apollo/client';
 
-// for filters
-import { categoryOptionsArray, countryOptionsArray } from '../../const/filterMappings'
-import genMetaEvidence from '../../interaction/genMetaEvidence'
-
-
 const LEAGUES_QUERY = gql`
-  query getLeagues {
-    events(where: {category: 12, country: 186}) {
+  query getLeagues($country: Int, $category: Int) {
+    leagues(where: {country: $country, category:$category}) {
       league
     }
-  }
+}
 `;
 
-export default function CreateBet({ web3, betContract, account, setAccount, filters, setFilters, archon, ipfsClient }) {
+export default function CreateBet({ web3 ,betContract, account, filters, setFilters, archon, ipfsClient }) {
   const history = useHistory();
   const [show, setShow] = useState(false);
   const [creationSuccess, setSuccess] = useState(false);
   const [creating, setCreating] = useState(false);
   const [creationError, setError] = useState(false);
 
-  //const { loading, error, data } = useQuery(LEAGUES_QUERY);
+
+  const { loading, error, data, refetch } = useQuery(LEAGUES_QUERY, {
+    variables: filters,
+    notifyOnNetworkStatusChange: true
+  });
 
   const handleCloseModal = () => {
     setShow(false);
@@ -45,17 +48,6 @@ export default function CreateBet({ web3, betContract, account, setAccount, filt
     setShow(false);
     history.push('/event');
   };
-
-  let leagueAutocompleteOptions = [];
-
-  // const updateLeagueAutoCompleteOptions = async () => {
-  //   if (!loading && !error) {
-  //     leagueAutocompleteOptions = [];
-  //     data.events.map(event => 
-  //       leagueAutocompleteOptions.push(<option value={event.league}></option>)  
-  //     );
-  //   }
-  // }
 
   const initialValues = {
     event: '',
@@ -100,7 +92,7 @@ export default function CreateBet({ web3, betContract, account, setAccount, filt
     let dateTimeAsUTC = Date.UTC(year, (parseInt(month) - 1).toString(), day, hours, minutes);
 
     let metaEvidence = genMetaEvidence(account, '', formikForm.values.event + ' ' + new Date(dateTimeAsUTC).toISOString().slice(0, 10), formikForm.values.creatorBet);
-    let fileObject = {content: JSON.stringify(metaEvidence)};
+    let fileObject = { content: JSON.stringify(metaEvidence) };
 
     let result;
     try {
@@ -111,16 +103,16 @@ export default function CreateBet({ web3, betContract, account, setAccount, filt
     }
 
     betContract.methods
-            .createBet(formikForm.values.event,
-                       formikForm.values.creatorBet, 
-                       formikForm.values.league,
-                       formikForm.values.country,
-                       formikForm.values.category,
-                       dateTimeAsUTC.toString().slice(0, -3),
-                       formikForm.values.timeToVote,
-                       formikForm.values.odd, '/ipfs/' + result.path)
-            .send({from: account, value: formikForm.values.stake})
-            .then((res) => handleBetCreated(), (res) => handleRejected())
+      .createBet(formikForm.values.event,
+        formikForm.values.creatorBet,
+        formikForm.values.league,
+        formikForm.values.country,
+        formikForm.values.category,
+        dateTimeAsUTC.toString().slice(0, -3),
+        formikForm.values.timeToVote,
+        formikForm.values.odd, '/ipfs/' + result.path)
+      .send({ from: account, value: formikForm.values.stake })
+      .then((res) => handleBetCreated(), (res) => handleRejected())
   };
 
   const handleBetCreated = () => {
@@ -168,7 +160,6 @@ export default function CreateBet({ web3, betContract, account, setAccount, filt
                   touched={formikForm.touched.event}
                 />
               </div>
-
 
               <div className="form-group">
                 <Label htmlFor="startDate">Event start date</Label>
@@ -219,8 +210,9 @@ export default function CreateBet({ web3, betContract, account, setAccount, filt
                     formikForm.handleChange(e);
                     setFilters({
                       ...filters,
-                      country: e.currentTarget.value
-                    })
+                      country: Number(e.currentTarget.value)
+                    });
+                    refetch({ variables: filters });
                   }}
                   touched={formikForm.touched.country}
                   name='country'
@@ -240,8 +232,9 @@ export default function CreateBet({ web3, betContract, account, setAccount, filt
                     formikForm.handleChange(e);
                     setFilters({
                       ...filters,
-                      category: e.currentTarget.value
-                    })
+                      category: Number(e.currentTarget.value)
+                    });
+                    refetch({ variables: filters });
                   }}
                   touched={formikForm.touched.category}
                   name='category'
@@ -262,7 +255,8 @@ export default function CreateBet({ web3, betContract, account, setAccount, filt
                   value={formikForm.values.league}
                   error={formikForm.errors.league}
                   touched={formikForm.touched.league}
-                  autoCompleteOptions={leagueAutocompleteOptions}
+                  autoCompleteOptions={data && Array.from(data.leagues.map((league) => <option key={league.league}>{league.league}</option>))}
+                  autoComplete="off"
                 />
               </div>
 
@@ -321,7 +315,7 @@ export default function CreateBet({ web3, betContract, account, setAccount, filt
         <Modal.Header closeButton>
           <Modal.Title>Bet Creation</Modal.Title>
         </Modal.Header>
-        {creating && <Spinner animation="border"/>}
+        {creating && <Spinner animation="border" />}
         {creationSuccess && <Modal.Body>Your bet has been successfully created</Modal.Body>}
         {creationError && <Modal.Body>There was an error with your transaction!</Modal.Body>}
         <Modal.Footer>
