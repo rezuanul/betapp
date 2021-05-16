@@ -124,7 +124,7 @@ export default function BetTable({ betContract, account, betData }) {
         <>
             <div className="table-responsive">
                 <table className="table table-striped table-bordered">
-                    <thead class="bg-primary text-white font-bold">
+                    <thead className="bg-primary text-white font-bold">
                         <tr>
                             <th>Description</th>
                             <th>Creator</th>
@@ -157,7 +157,7 @@ export default function BetTable({ betContract, account, betData }) {
                                         <span className="name d-block">
                                             <a href={'https://etherscan.io/address/' + bet.creator}>
                                                 {bet.creator.slice(0, 5) + '...' + bet.creator.slice(-3, bet.creator.length)}
-                                                {bet.creator == account && '(You)'}
+                                                {bet.creator === account && '(You)'}
                                             </a>
                                         </span>
                                     </div>
@@ -168,7 +168,7 @@ export default function BetTable({ betContract, account, betData }) {
                                     </div>
                                 </td>
                                 {
-                                    bet.backer == "0x0000000000000000000000000000000000000000" &&
+                                    bet.backer === "0x0000000000000000000000000000000000000000" &&
                                     <td>
                                         <div>
                                             <span className="name d-block"> You can be one! </span>
@@ -177,13 +177,13 @@ export default function BetTable({ betContract, account, betData }) {
                                 }
 
                                 {
-                                    bet.backer != "0x0000000000000000000000000000000000000000" &&
+                                    bet.backer !== "0x0000000000000000000000000000000000000000" &&
                                     <td>
                                         <div>
                                             <span className="name d-block">
                                                 <a href={'https://etherscan.io/address/' + bet.backer}>
                                                     {bet.backer.slice(0, 5) + '...' + bet.backer.slice(-3, bet.backer.length)}
-                                                    {bet.backer == account && '(You)'}
+                                                    {bet.backer === account && '(You)'}
                                                 </a>
                                             </span>
                                         </div>
@@ -215,21 +215,21 @@ export default function BetTable({ betContract, account, betData }) {
                                 </td>
                                 <td>
                                     <div className="col px-2">
-                                        {bet.state == STATE_OPEN &&
+                                        {bet.state === STATE_OPEN &&
                                             <button id="backBet" onClick={() => backBetHandler(bet.id, bet.backerStake)} className="btn btn-danger btn-block">
                                                 Back Bet
                                     </button>}
                                         {/* add check for if player already voted in sub graph */}
-                                        {(bet.state == STATE_VOTING && (bet.creator == account || bet.backer == account)) &&
+                                        {(bet.state === STATE_VOTING && (bet.creator === account || bet.backer === account)) &&
                                             <button id="layerWins" onClick={() => layerWinsHandler(bet.id)} className="btn btn-danger btn-block">
                                                 Layer wins
                                     </button>}
                                         {/* add check for if player already voted in sub graph */}
-                                        {(bet.state == STATE_VOTING && (bet.creator == account || bet.backer == account)) &&
+                                        {(bet.state === STATE_VOTING && (bet.creator === account || bet.backer === account)) &&
                                             <button id="backerWins" onClick={() => backerWinsHandler(bet.id)} className="btn btn-danger btn-block">
                                                 Backer wins
                                     </button>}
-                                        {(bet.state == STATE_DISAGREEMENT && (bet.creator == account || bet.backer == account)) &&
+                                        {(bet.state === STATE_DISAGREEMENT && (bet.creator === account || bet.backer === account)) &&
                                             <button id="dispute" onClick={() => disputeBetHandler(bet.id)} className="btn btn-danger btn-block">
                                                 Dispute
                                     </button>}
@@ -242,7 +242,7 @@ export default function BetTable({ betContract, account, betData }) {
                                                 Refund
                                             </button>
                                         } */}
-                                        {(bet.state == STATE_AGREEMENT && (bet.creator == account || bet.backer == account)) &&
+                                        {(bet.state === STATE_AGREEMENT && (bet.creator === account || bet.backer === account)) &&
                                             <button id="claimWinnings" onClick={() => claimWinningsHandler(bet.id)} className="btn btn-danger btn-block">
                                                 ClaimWinnings
                                     </button>}

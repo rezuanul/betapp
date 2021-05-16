@@ -51,17 +51,9 @@ function App() {
 
   // Hooks for listing filters
   const [filters, setFilters] = useState({
-    country: 186,
-    category: 12,
-    league: '',
-    noParams: true,
-    countryB: false,
-    categoryB: false,
-    leagueB: false,
-    countryCategoryB: false,
-    countryLeagueB: false,
-    categoryLeagueB: false,
-    countryCategoryLeagueB: false
+    country: '',
+    category: '',
+    league: undefined // The undefined value, We can't give the parameter as undefined to the query, and we want to also query the empty string.
   })
 
   /// called on every render. "Listens" to account changes.

@@ -3,48 +3,73 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
-import { countryOptionsArray, categoryOptionsArray } from '../../const/filterMappings'
+import { countryOptionsArray, categoryOptionsArray } from '../../const/filterMappings';
+
+import resolveFilterVariablesForQuery from '../../interaction/filterBooleanResolver';
 
 import EventTable from '../../components/EventTable';
-import { useQuery } from '@apollo/client';
+import { useQuery, useLazyQuery } from '@apollo/client';
 
 import { EVENTS_QUERY } from '../../const/queries'
 
 export default function Homepage({ account, filters, setFilters }) {
-  const [activeTab, setActiveTab] = useState('link-1');
+
+  // We differentiate the query variables from the state variables because
+  // they cannot be null on query, whereas we want the filters to be null
+  // when there are no selections
+  let queryVariables = {
+    country: 0,
+    category: 0,
+    league: 'undefined',
+    noParams: true,
+    countryB: false,
+    categoryB: false,
+    leagueB: false,
+    countryCategoryB: false,
+    countryLeagueB: false,
+    categoryLeagueB: false,
+    countryCategoryLeagueB: false
+  }
 
   const { loading, error, data, refetch } = useQuery(EVENTS_QUERY, {
-    variables: filters,
+    variables: queryVariables,
     notifyOnNetworkStatusChange: true
   });
 
-  const updateFilters = () => {
-
+  const countryFilterHandler = async (e) => {
+    await setFilters(filters => {
+      filters.country = e.target.value;
+      return filters;
+    });
+    console.log(resolveFilterVariablesForQuery(filters))
+    refetch(resolveFilterVariablesForQuery(filters));
   }
 
-  const countryFilterHandler = (e) => {
-    setFilters({
-      ...filters,
-      country: e.target.value
-    })
+  const leagueFilterHandler = async (e) => {
+    await setFilters(filters => {
+      filters.league = e.target.value;
+      return filters;
+    });
+    refetch(resolveFilterVariablesForQuery(filters));
   }
 
-  const leagueFilterHandler = (e) => {
-    setFilters({
-      ...filters,
-      league: e.target.value
-    })
-  }
-
-  const categoryFilterHandler = (e) => {
-    setFilters({
-      ...filters,
-      category: e.target.value
-    })
+  const categoryFilterHandler = async (e) => {
+    await setFilters(filters => {
+      filters.category = e.target.value;
+      return filters;
+    });
+    refetch(resolveFilterVariablesForQuery(filters));
   }
 
   const resetFilters = () => {
+    setFilters(filters => {
+      filters.league = undefined;
+      filters.category = '';
+      filters.country = '';
+      return filters;
+    });
 
+    refetch(resolveFilterVariablesForQuery(filters));
   }
 
   return (
@@ -74,7 +99,7 @@ export default function Homepage({ account, filters, setFilters }) {
                     <Form.Group controlId="SelectCountry">
                       <Form.Label>Country</Form.Label>
                       <Form.Control
-                        value={((filters.country) ? filters.country : 0)}
+                        value={filters.country}
                         onChange={countryFilterHandler}
                         as="select"
                         custom
@@ -89,7 +114,7 @@ export default function Homepage({ account, filters, setFilters }) {
                     <Form.Group controlId="SelectCategory">
                       <Form.Label>Category</Form.Label>
                       <Form.Control
-                        value={((filters.category) ? filters.category : 0)}
+                        value={filters.category}
                         onChange={categoryFilterHandler}
                         as="select"
                         custom
@@ -115,8 +140,9 @@ export default function Homepage({ account, filters, setFilters }) {
                   </Form>
                 </div>
               </div>
+              {error && <div><p>Error loading data</p></div>}
               <div className="bet-tab">
-                <EventTable betData={data && { data }} />
+                <EventTable betData={data && { data }} error={error} loading={loading} />
               </div>
             </div>
           </div>
