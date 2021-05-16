@@ -67,7 +67,7 @@ export default function BetTable({ betContract, account, betData }) {
     const handleTransactionError = () => {
         setTransacting(false);
         setTransactionError(true);
-        
+
     }
 
     const handleTransactionSuccessful = () => {
@@ -81,7 +81,7 @@ export default function BetTable({ betContract, account, betData }) {
             .placeBet(betID)
             .send({ from: account, value: stake })
             .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
-            
+
     }
 
     const layerWinsHandler = async (betID) => {
@@ -137,7 +137,6 @@ export default function BetTable({ betContract, account, betData }) {
                             <th>Country</th>
                             <th>Category</th>
                             <th>League</th>
-                            <th>State</th>
                             {/*<th>Metaevidence</th>
                             <th>Dispute ID</th>*/}
                             <th></th>
@@ -155,12 +154,17 @@ export default function BetTable({ betContract, account, betData }) {
                                 </td>
                                 <td>
                                     <div>
-                                        <span className="name d-block">{bet.creator}</span>
+                                        <span className="name d-block">
+                                            <a href={'https://etherscan.io/address/' + bet.creator}>
+                                                {bet.creator.slice(0, 5) + '...' + bet.creator.slice(-3, bet.creator.length)}
+                                                {bet.creator == account && '(You)'}
+                                            </a>
+                                        </span>
                                     </div>
                                 </td>
                                 <td>
                                     <div>
-                                        <span className="name d-block">{(bet.creatorStake / 1000000000000000000) } ETH </span>
+                                        <span className="name d-block">{(bet.creatorStake / 1000000000000000000)} ETH </span>
                                     </div>
                                 </td>
                                 {
@@ -169,21 +173,26 @@ export default function BetTable({ betContract, account, betData }) {
                                         <div>
                                             <span className="name d-block"> You can be one! </span>
                                         </div>
-                                    </td>       
+                                    </td>
                                 }
 
                                 {
                                     bet.backer != "0x0000000000000000000000000000000000000000" &&
-                                        <td>
-                                            <div>
-                                                <span className="name d-block">{bet.backer}</span>
-                                            </div>
-                                        </td>
+                                    <td>
+                                        <div>
+                                            <span className="name d-block">
+                                                <a href={'https://etherscan.io/address/' + bet.backer}>
+                                                    {bet.backer.slice(0, 5) + '...' + bet.backer.slice(-3, bet.backer.length)}
+                                                    {bet.backer == account && '(You)'}
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </td>
                                 }
-                                
+
                                 <td>
                                     <div>
-                                        <span className="name d-block">{(bet.backerStake / 1000000000000000000 )} ETH </span>
+                                        <span className="name d-block">{(bet.backerStake / 1000000000000000000)} ETH </span>
                                     </div>
                                 </td>
 
@@ -204,30 +213,24 @@ export default function BetTable({ betContract, account, betData }) {
                                         <span className="name d-block">{bet.league}</span>
                                     </div>
                                 </td>
-
-                                <td>
-                                    <div>
-                                        <span className="name d-block">{bet.state}</span>
-                                    </div>
-                                </td>
                                 <td>
                                     <div className="col px-2">
                                         {bet.state == STATE_OPEN &&
-                                            <button id="backBet" onClick={() =>backBetHandler(bet.id)} className="btn btn-danger btn-block">
-                                                Back Bet   
+                                            <button id="backBet" onClick={() => backBetHandler(bet.id, bet.backerStake)} className="btn btn-danger btn-block">
+                                                Back Bet
                                     </button>}
-                                    {/* add check for if player already voted in sub graph */}
+                                        {/* add check for if player already voted in sub graph */}
                                         {(bet.state == STATE_VOTING && (bet.creator == account || bet.backer == account)) &&
-                                            <button id="layerWins" onClick={() =>layerWinsHandler(bet.id)} className="btn btn-danger btn-block">
+                                            <button id="layerWins" onClick={() => layerWinsHandler(bet.id)} className="btn btn-danger btn-block">
                                                 Layer wins
                                     </button>}
-                                    {/* add check for if player already voted in sub graph */}
-                                    {(bet.state == STATE_VOTING && (bet.creator == account || bet.backer == account)) &&
-                                            <button id="backerWins" onClick={() =>backerWinsHandler(bet.id)} className="btn btn-danger btn-block">
+                                        {/* add check for if player already voted in sub graph */}
+                                        {(bet.state == STATE_VOTING && (bet.creator == account || bet.backer == account)) &&
+                                            <button id="backerWins" onClick={() => backerWinsHandler(bet.id)} className="btn btn-danger btn-block">
                                                 Backer wins
                                     </button>}
                                         {(bet.state == STATE_DISAGREEMENT && (bet.creator == account || bet.backer == account)) &&
-                                            <button id="dispute" onClick={() =>disputeBetHandler(bet.id)} className="btn btn-danger btn-block">
+                                            <button id="dispute" onClick={() => disputeBetHandler(bet.id)} className="btn btn-danger btn-block">
                                                 Dispute
                                     </button>}
                                         {/* {((bet.outcome == NO_OUTCOME) && ((bet.state == STATE_VOTING && bet.votingDeadline < parseInt((Date.now().getTime() / 1000).toFixed(0)))
@@ -240,7 +243,7 @@ export default function BetTable({ betContract, account, betData }) {
                                             </button>
                                         } */}
                                         {(bet.state == STATE_AGREEMENT && (bet.creator == account || bet.backer == account)) &&
-                                            <button id="claimWinnings" onClick={() =>claimWinningsHandler(bet.id)} className="btn btn-danger btn-block">
+                                            <button id="claimWinnings" onClick={() => claimWinningsHandler(bet.id)} className="btn btn-danger btn-block">
                                                 ClaimWinnings
                                     </button>}
                                     </div>
