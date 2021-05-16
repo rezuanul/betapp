@@ -1,4 +1,4 @@
-const categoryOptions = [
+export const categoryOptions = [
     { value: 0, label: 'Other' },
     { value: 1, label: 'Aikido' },
     { value: 2, label: 'Archery' },
@@ -20,7 +20,7 @@ const categoryOptions = [
     { value: 18, label: 'Weightlifting' },
 ];
 
-const countryOptions = [
+export const countryOptions = [
     { value: 0, label: 'Afghanistan' },
     { value: 1, label: 'Albania' },
     { value: 2, label: 'Algeria' },

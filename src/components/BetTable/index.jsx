@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Modal from '../../components/Modal';
+import { categoryOptions, countryOptions } from '../../const/filterMappings';
 
 import { useHistory } from 'react-router-dom';
 
@@ -15,9 +16,9 @@ const STATE_DISPUTED = 4;
 const STATE_RESOLVED = 5;
 const STATE_REFUNDED = 6;
 
-export default function BetTable({ betContract, account }) {
+export default function BetTable({ betContract, account, betData }) {
 
-    const data = [0, 1, 2, 3, 4, 5, 6, 7].map((idd) => ({
+    /*const data = [0, 1, 2, 3, 4, 5, 6, 7].map((idd) => ({
         id: idd,
         description: 'Barcelona vs Real Madrid',
         creatorBetDescription: 'Barcelona Wins',
@@ -34,7 +35,7 @@ export default function BetTable({ betContract, account }) {
         league: 'La Liga',
         disputeID: null,
         _metaEvidence: 'ipfs/kaf324ggmja3432gkmvjfdsnvakfoksdoi325'
-    }));
+    }));*/
 
     const history = useHistory();
     const [show, setShow] = useState(false);
@@ -112,50 +113,94 @@ export default function BetTable({ betContract, account }) {
                             <th>Description</th>
                             <th>Creator</th>
                             <th>Creator Bet</th>
-                            <th>Start Time</th>
-                            <th>Time to vote</th>
-                            <th>Your odd</th>
-                            <th>Your stake</th>
+                            {/* <th>Created On</th> */}
+                            {/*<th>Time to vote</th> */}
                             <th>Backer</th>
+                            {/*<th>Backer odd</th>*/}
+                            <th>Backer stake</th>
                             <th>Country</th>
                             <th>Category</th>
                             <th>League</th>
                             <th>State</th>
-                            <th>Metaevidence</th>
-                            <th>Dispute ID</th>
+                            {/*<th>Metaevidence</th>
+                            <th>Dispute ID</th>*/}
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map((bet) => (
+                        {betData && betData.data.bets.map((bet) => (
                             <tr key={bet.id}>
                                 <td>
                                     <div className="d-flex">
                                         <div className="content">
-                                            <span className="name d-block">{bet.creatorBetDescription}</span>
+                                            <span className="name d-block">{bet.description}</span>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div>
-                                        <span className="d-block">{bet.stakingDeadline}</span>
+                                        <span className="name d-block">{bet.creator}</span>
                                     </div>
                                 </td>
                                 <td>
-                                    <span>{bet.backerOdd}</span>
+                                    <div>
+                                        <span className="name d-block">{(bet.creatorStake / 1000000000000000000) } ETH </span>
+                                    </div>
                                 </td>
+                                {
+                                    bet.backer == "0x0000000000000000000000000000000000000000" &&
+                                    <td>
+                                        <div>
+                                            <span className="name d-block"> You can be one! </span>
+                                        </div>
+                                    </td>       
+                                }
+
+                                {
+                                    bet.backer != "0x0000000000000000000000000000000000000000" &&
+                                        <td>
+                                            <div>
+                                                <span className="name d-block">{bet.backer}</span>
+                                            </div>
+                                        </td>
+                                }
+                                
                                 <td>
-                                    <span>{bet.openStake}</span>
+                                    <div>
+                                        <span className="name d-block">{(bet.backerStake / 1000000000000000000 )} ETH </span>
+                                    </div>
                                 </td>
+
                                 <td>
-                                    <span>{bet.timeToVote}</span>
+                                    <div>
+                                        <span className="name d-block">{countryOptions[bet.country].label}</span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div>
+                                        <span className="name d-block">{categoryOptions[bet.category].label}</span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div>
+                                        <span className="name d-block">{bet.league}</span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div>
+                                        <span className="name d-block">{bet.state}</span>
+                                    </div>
                                 </td>
                                 <td>
                                     <div className="col px-2">
                                         {bet.state == STATE_OPEN &&
                                             <button id="backBet" onClick={backBetHandler} className="btn btn-danger btn-block">
                                                 Back Bet
-                                    </button>}
+                                            </button>
+                                        }
                                     {/* add check for if player already voted in sub graph */}
                                         {(bet.state == STATE_VOTING && (bet.creator == account || bet.backer == account)) &&
                                             <button id="layerWins" onClick={layerWinsHandler} className="btn btn-danger btn-block">
