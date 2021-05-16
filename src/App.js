@@ -51,9 +51,17 @@ function App() {
 
   // Hooks for listing filters
   const [filters, setFilters] = useState({
-    country: null,
-    category: null,
-    league: null,
+    country: 186,
+    category: 12,
+    league: '',
+    noParams: true,
+    countryB: false,
+    categoryB: false,
+    leagueB: false,
+    countryCategoryB: false,
+    countryLeagueB: false,
+    categoryLeagueB: false,
+    countryCategoryLeagueB: false
   })
 
   /// called on every render. "Listens" to account changes.

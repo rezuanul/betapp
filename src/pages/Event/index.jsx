@@ -1,9 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+
 
 import BetTable from '../../components/BetTable';
 import PageCover from '../../components/Layout/PageCover';
 import { useQuery, gql } from '@apollo/client';
+
+import { countryOptionsArray, categoryOptionsArray } from '../../const/filterMappings'
+
 
 const _ALL = gql`
     query getAll{
@@ -26,6 +32,33 @@ const _ALL = gql`
 export default function Event({ betContract, account, filters, setFilters, archon, ipfsClient }) {
   const { loading, error, data, refetch, networkStatus } = useQuery(_ALL, { notifyOnNetworkStatusChange: true });
 
+
+  const countryFilterHandler = (e) => {
+    setFilters({
+      ...filters,
+      country: e.target.value
+    })
+  }
+
+  const leagueFilterHandler = (e) => {
+    setFilters({
+      ...filters,
+      league: e.target.value
+    })
+  }
+
+  const categoryFilterHandler = (e) => {
+    setFilters({
+      ...filters,
+      category: e.target.value
+    })
+  }
+
+  const resetFilters = () => {
+
+  }
+
+
   return (
     <div>
       <PageCover description="Events" />
@@ -38,9 +71,60 @@ export default function Event({ betContract, account, filters, setFilters, archo
             <h3>Bets</h3>
           </div>
         </div>
-
+        <div className="col-lg-3 offset-lg-0 col-sm-1">
+          <Button variant="warning" onClick={resetFilters}>
+            Reset filters
+                   </Button>
+        </div>
         <div className="row">
-                  <BetTable account={account} betContract={betContract} betData={data && { data }}/>
+          <div className="col-lg-3 col-sm-3">
+            <Form>
+              <Form.Group controlId="SelectCountry">
+                <Form.Label>Country</Form.Label>
+                <Form.Control
+                  value={((filters.country) ? filters.country : 0)}
+                  onChange={countryFilterHandler}
+                  as="select"
+                  custom
+                >
+                  {countryOptionsArray}
+                </Form.Control>
+              </Form.Group>
+            </Form>
+          </div>
+          <div className="col-lg-3 offset-lg-0 col-sm-3">
+            <Form>
+              <Form.Group controlId="SelectCategory">
+                <Form.Label>Category</Form.Label>
+                <Form.Control
+                  value={((filters.category) ? filters.category : 0)}
+                  onChange={categoryFilterHandler}
+                  as="select"
+                  custom
+                >
+                  {categoryOptionsArray}
+                </Form.Control>
+              </Form.Group>
+            </Form>
+          </div>
+          <div className="col-lg-1 offset-lg-0 col-sm-1">
+            <Form>
+              <Form.Group controlId="SelectLeague">
+                <Form.Label>League</Form.Label>
+                <Form.Control
+                  value={filters.league}
+                  onChange={leagueFilterHandler}
+                  as="input"
+                  custom
+                >
+
+                </Form.Control>
+              </Form.Group>
+            </Form>
+          </div>
+        </div>
+        <div className="row">
+          <BetTable account={account} betContract={betContract} betData={data && { data }} />
         </div>
       </div>
     </div>
