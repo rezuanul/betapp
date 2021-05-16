@@ -51,6 +51,14 @@ export default function BetTable({ betContract, account, betData }) {
         setTransactionError(false);
     }
 
+    const handleOpenModal = () => {
+        setShow(true);
+        setTransacting(true);
+        setTransactionSuccess(false);
+        setTransactionError(false);
+    };
+
+
     const handleRedirect = () => {
         setShow(false);
         history.push('/event');
@@ -59,6 +67,7 @@ export default function BetTable({ betContract, account, betData }) {
     const handleTransactionError = () => {
         setTransacting(false);
         setTransactionError(true);
+        
     }
 
     const handleTransactionSuccessful = () => {
@@ -67,37 +76,44 @@ export default function BetTable({ betContract, account, betData }) {
     }
 
     const backBetHandler = async (betID, stake) => {
+        handleOpenModal();
         betContract.methods
             .placeBet(betID)
             .send({ from: account, value: stake })
             .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
+            
     }
 
     const layerWinsHandler = async (betID) => {
+        handleOpenModal();
         betContract.methods
             .voteOnOutcome(betID, CREATOR_WINS)
             .send({ from: account })
             .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
     }
     const backerWinsHandler = async (betID) => {
+        handleOpenModal();
         betContract.methods
             .voteOnOutcome(betID, BACKER_WINS)
             .send({ from: account })
             .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
     }
     const disputeBetHandler = async (betID) => {
+        handleOpenModal();
         betContract.methods
             .createDispute(betID)
             .send({ from: account })
             .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
     }
     const refundBetHandler = async (betID) => {
+        handleOpenModal();
         betContract.methods
             .refund(betID)
             .send({ from: account })
             .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
     }
     const claimWinningsHandler = async (betID) => {
+        handleOpenModal();
         betContract.methods
             .claimWinnings(betID)
             .send({ from: account })
