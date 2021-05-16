@@ -153,21 +153,21 @@ export default function BetTable({ betContract, account }) {
                                 <td>
                                     <div className="col px-2">
                                         {bet.state == STATE_OPEN &&
-                                            <button id="backBet" onClick={backBetHandler} className="btn btn-danger btn-block">
-                                                Back Bet
+                                            <button id="backBet" onClick={() =>backBetHandler(bet.id)} className="btn btn-danger btn-block">
+                                                Back Bet   
                                     </button>}
                                     {/* add check for if player already voted in sub graph */}
                                         {(bet.state == STATE_VOTING && (bet.creator == account || bet.backer == account)) &&
-                                            <button id="layerWins" onClick={layerWinsHandler} className="btn btn-danger btn-block">
+                                            <button id="layerWins" onClick={() =>layerWinsHandler(bet.id)} className="btn btn-danger btn-block">
                                                 Layer wins
                                     </button>}
                                     {/* add check for if player already voted in sub graph */}
                                     {(bet.state == STATE_VOTING && (bet.creator == account || bet.backer == account)) &&
-                                            <button id="backerWins" onClick={backerWinsHandler} className="btn btn-danger btn-block">
+                                            <button id="backerWins" onClick={() =>backerWinsHandler(bet.id)} className="btn btn-danger btn-block">
                                                 Backer wins
                                     </button>}
                                         {(bet.state == STATE_DISAGREEMENT && (bet.creator == account || bet.backer == account)) &&
-                                            <button id="dispute" onClick={disputeBetHandler} className="btn btn-danger btn-block">
+                                            <button id="dispute" onClick={() =>disputeBetHandler(bet.id)} className="btn btn-danger btn-block">
                                                 Dispute
                                     </button>}
                                         {/* {((bet.outcome == NO_OUTCOME) && ((bet.state == STATE_VOTING && bet.votingDeadline < parseInt((Date.now().getTime() / 1000).toFixed(0)))
@@ -175,12 +175,12 @@ export default function BetTable({ betContract, account }) {
                                             || (bet.state == STATE_OPEN && bet.stakingDeadline < parseInt((Date.now().getTime() / 1000).toFixed(0)))
                                         )
                                             && (bet.creator == account || bet.backer == account)) &&
-                                            <button id="refund" onClick={refundBetHandler} className="btn btn-danger btn-block">
+                                            <button id="refund" onClick={() =>refundBetHandler(bet.id)} className="btn btn-danger btn-block">
                                                 Refund
                                             </button>
                                         } */}
                                         {(bet.state == STATE_AGREEMENT && (bet.creator == account || bet.backer == account)) &&
-                                            <button id="claimWinnings" onClick={claimWinningsHandler} className="btn btn-danger btn-block">
+                                            <button id="claimWinnings" onClick={() =>claimWinningsHandler(bet.id)} className="btn btn-danger btn-block">
                                                 ClaimWinnings
                                     </button>}
                                     </div>

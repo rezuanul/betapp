@@ -29,7 +29,9 @@ export default function EventTable({betData}) {
                 </div>
               </td>
               <td>
-                <span>{event.bets.length}</span>
+                {event.bet && <span>{event.bets.length}</span>}
+                {!event.bet && <span>0</span>}
+                
               </td>
               <td>
                 <Link to="/event" className="btn btn-danger">
