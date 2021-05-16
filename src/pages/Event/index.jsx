@@ -32,7 +32,6 @@ const _ALL = gql`
 export default function Event({ betContract, account, filters, setFilters, archon, ipfsClient }) {
   const { loading, error, data, refetch, networkStatus } = useQuery(_ALL, { notifyOnNetworkStatusChange: true });
 
-
   const countryFilterHandler = (e) => {
     setFilters({
       ...filters,

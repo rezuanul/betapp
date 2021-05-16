@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function EventTable({ betData, error, loading }) {
+export default function EventTable({ betData, error, loading, showBetsHandler }) {
   return (
     <div className="table-responsive">
       <table className="table table-striped table-bordered">
@@ -34,7 +34,7 @@ export default function EventTable({ betData, error, loading }) {
 
               </td>
               <td>
-                <Link to="/event" className="btn btn-danger">
+                <Link to="/event" className="btn btn-danger" onClick={() => showBetsHandler(event.id)}>
                   Show Bets
                 </Link>
               </td>

@@ -53,7 +53,8 @@ function App() {
   const [filters, setFilters] = useState({
     country: '',
     category: '',
-    league: undefined // The undefined value, We can't give the parameter as undefined to the query, and we want to also query the empty string.
+    league: undefined,
+    eventID: null // The undefined value, We can't give the parameter as undefined to the query, and we want to also query the empty string.
   })
 
   /// called on every render. "Listens" to account changes.

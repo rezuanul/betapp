@@ -41,7 +41,6 @@ export default function Homepage({ account, filters, setFilters }) {
       filters.country = e.target.value;
       return filters;
     });
-    console.log(resolveFilterVariablesForQuery(filters))
     refetch(resolveFilterVariablesForQuery(filters));
   }
 
@@ -61,8 +60,8 @@ export default function Homepage({ account, filters, setFilters }) {
     refetch(resolveFilterVariablesForQuery(filters));
   }
 
-  const resetFilters = () => {
-    setFilters(filters => {
+  const resetFilters = async () => {
+    await setFilters(filters => {
       filters.league = undefined;
       filters.category = '';
       filters.country = '';
@@ -70,6 +69,13 @@ export default function Homepage({ account, filters, setFilters }) {
     });
 
     refetch(resolveFilterVariablesForQuery(filters));
+  }
+
+  const showBetsHandler = async (eventID) => {
+    await setFilters(filters => {
+      filters.eventID = eventID;
+      return filters;
+    });
   }
 
   return (
@@ -142,7 +148,7 @@ export default function Homepage({ account, filters, setFilters }) {
               </div>
               {error && <div><p>Error loading data</p></div>}
               <div className="bet-tab">
-                <EventTable betData={data && { data }} error={error} loading={loading} />
+                <EventTable betData={data && { data }} error={error} loading={loading} showBetsHandler={showBetsHandler}/>
               </div>
             </div>
           </div>
