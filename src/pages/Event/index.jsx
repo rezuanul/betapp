@@ -16,6 +16,7 @@ const _ALL = gql`
       bets{
         id
         creator
+        creatorBetDescription
         creatorStake
         backer
         backerStake
@@ -60,20 +61,17 @@ export default function Event({ betContract, account, filters, setFilters, archo
 
   return (
     <div>
-      <PageCover description="Events" />
-      <Link to="/create-bet" className="btn btn-danger btn-block">
-        Create Bet
-      </Link>
+      <PageCover description={"Search and Back bets"} />
       <div className="mt-5 container">
         <div className="row">
-          <div className="col-sm-12">
-            <h3>Bets</h3>
-          </div>
+          <Link to="/create-bet" className="btn btn-danger btn-block">
+            Create a Bet
+          </Link>
         </div>
         <div className="col-lg-3 offset-lg-0 col-sm-1">
           <Button variant="warning" onClick={resetFilters}>
             Reset filters
-                   </Button>
+             </Button>
         </div>
         <div className="row">
           <div className="col-lg-3 col-sm-3">

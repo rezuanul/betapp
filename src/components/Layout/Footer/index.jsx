@@ -1,15 +1,13 @@
 export default function index() {
   return (
-    <div className="mt-5 py-5 bg-primary footer">
+    <div className="mt-7 py-5 bg-primary footer">
       <div className="container">
         <div className="row">
           <div className="col-md-5">
-            <h4>About BetApp</h4>
+            <h4>About GambleBoard</h4>
 
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.{' '}
+              GambleBoard is a decentralized application running on the Ethereum blockchain. It makes it possible for users to bet against each other on almost any event!
             </p>
           </div>
 
@@ -18,18 +16,16 @@ export default function index() {
 
             <img
               className="img-fluid"
-              src="http://via.placeholder.com/600x100?text=Powered+By+Image"
+              src="https://block-builders.nl/wp-content/uploads/2021/01/Graph-Protocol-678x381.png"
               alt="Powered By"
             />
           </div>
           <div className="col-md-3">
-            <h4>Know More</h4>
-            <ul className="pl-3">
-              <li>About Us</li>
-              <li>Contact Us</li>
-              <li>FAQs</li>
-              <li>Terms & Conditions</li>
-            </ul>
+            <img
+              className="img-fluid"
+              src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Kleros-logo.png"
+              alt="Powered By"
+            />
           </div>
         </div>
 

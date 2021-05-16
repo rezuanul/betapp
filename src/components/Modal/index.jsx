@@ -10,7 +10,7 @@ export default function TransactionModal({ show, handleCloseModal, handleRedirec
             <Modal.Header closeButton>
                 <Modal.Title>{ title }</Modal.Title>
             </Modal.Header>
-            {transacting && <Spinner animation="border" />}
+            {transacting && <Spinner animation="border" className="mx-auto" />}
             {success && <Modal.Body>{successText}</Modal.Body>}
             {error && <Modal.Body>There was an error with your transaction!</Modal.Body>}
             <Modal.Footer>
