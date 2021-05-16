@@ -72,7 +72,7 @@ export default function Homepage({ account, filters, setFilters }) {
   }
 
   const showBetsHandler = async (eventID) => {
-    await setFilters(filters => {
+      await setFilters(filters => {
       filters.eventID = eventID;
       return filters;
     });

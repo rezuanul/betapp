@@ -8,29 +8,20 @@ import BetTable from '../../components/BetTable';
 import PageCover from '../../components/Layout/PageCover';
 import { useQuery, gql } from '@apollo/client';
 
-import { countryOptionsArray, categoryOptionsArray } from '../../const/filterMappings'
+import { countryOptionsArray, categoryOptionsArray } from '../../const/filterMappings';
+import { GET_BETS } from '../../const/queries';
 
 
-const _ALL = gql`
-    query getAll{
-      bets{
-        id
-        creator
-        creatorStake
-        backer
-        backerStake
-        description
-        timeCreated
-        state
-        league
-        category
-        country
-      }
-    }
-`;
 
 export default function Event({ betContract, account, filters, setFilters, archon, ipfsClient }) {
-  const { loading, error, data, refetch, networkStatus } = useQuery(_ALL, { notifyOnNetworkStatusChange: true });
+
+
+    let EventID = {
+        id: filters.eventID
+    };
+
+
+    const { loading, error, data, refetch, networkStatus } = useQuery(GET_BETS, { variables: EventID });
 
   const countryFilterHandler = (e) => {
     setFilters({

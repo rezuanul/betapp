@@ -17,7 +17,6 @@ const STATE_RESOLVED = 5;
 const STATE_REFUNDED = 6;
 
 export default function BetTable({ betContract, account, betData }) {
-
     /*const data = [0, 1, 2, 3, 4, 5, 6, 7].map((idd) => ({
         id: idd,
         description: 'Barcelona vs Real Madrid',
@@ -36,7 +35,7 @@ export default function BetTable({ betContract, account, betData }) {
         disputeID: null,
         _metaEvidence: 'ipfs/kaf324ggmja3432gkmvjfdsnvakfoksdoi325'
     }));*/
-
+    console.log(betData);
     const history = useHistory();
     const [show, setShow] = useState(false);
     const [transactionSuccess, setTransactionSuccess] = useState(false);
@@ -143,7 +142,7 @@ export default function BetTable({ betContract, account, betData }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {betData && betData.data.bets.map((bet) => (
+                        {betData && betData.data.events.bets.map((bet) => (
                             <tr key={bet.id}>
                                 <td>
                                     <div className="d-flex">
