@@ -21,7 +21,7 @@ export default function Navbar(connectMetamaskHandler) {
     <nav className={classnames('navbar navbar-expand-lg navbar-dark bg-primary')}>
       <div className="container">
         <a className="navbar-brand" href="/">
-          GambleBoard
+          Logo
         </a>
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav ml-auto mb-2 mb-lg-0">

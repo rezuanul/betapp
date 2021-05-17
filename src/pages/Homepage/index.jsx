@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
-import PageCover from '../../components/Layout/PageCover';
-
 
 import { countryOptionsArray, categoryOptionsArray } from '../../const/filterMappings';
 
@@ -82,9 +80,15 @@ export default function Homepage({ account, filters, setFilters }) {
 
   return (
     <div className="homepage">
-    <PageCover description={"Search upcoming events"}/>
       <section className="bet-section mb-n5">
         <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-6">
+              <div className="text-center">
+                <h2 className="text-primary">Bet & Play Now</h2>
+              </div>
+            </div>
+          </div>
           <Link to="/create-bet" className="btn btn-danger btn-block">
             Create Bet
           </Link>

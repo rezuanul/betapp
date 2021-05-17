@@ -51,17 +51,20 @@ export default function Event({ betContract, account, filters, setFilters, archo
 
   return (
     <div>
-      <PageCover description={"Search and Back bets"} />
+      <PageCover description="Events" />
+      <Link to="/create-bet" className="btn btn-danger btn-block">
+        Create Bet
+      </Link>
       <div className="mt-5 container">
         <div className="row">
-          <Link to="/create-bet" className="btn btn-danger btn-block">
-            Create a Bet
-          </Link>
+          <div className="col-sm-12">
+            <h3>Bets</h3>
+          </div>
         </div>
         <div className="col-lg-3 offset-lg-0 col-sm-1">
           <Button variant="warning" onClick={resetFilters}>
             Reset filters
-             </Button>
+                   </Button>
         </div>
         <div className="row">
           <div className="col-lg-3 col-sm-3">

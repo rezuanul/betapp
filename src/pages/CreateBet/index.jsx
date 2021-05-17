@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import { useHistory } from 'react-router-dom';
@@ -8,9 +9,6 @@ import * as yup from 'yup';
 import Input from '../../components/form/Input';
 import Label from '../../components/form/Label';
 import Select from '../../components/form/Select';
-import PageCover from '../../components/Layout/PageCover';
-import Modal from '../../components/Modal';
-
 
 // for filters
 import { categoryOptionsArray, countryOptionsArray } from '../../const/filterMappings';
@@ -26,7 +24,7 @@ const LEAGUES_QUERY = gql`
 }
 `;
 
-export default function CreateBet({ web3, betContract, account, filters, setFilters, archon, ipfsClient }) {
+export default function CreateBet({ web3 ,betContract, account, filters, setFilters, archon, ipfsClient }) {
   const history = useHistory();
   const [show, setShow] = useState(false);
   const [creationSuccess, setSuccess] = useState(false);
@@ -140,8 +138,12 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
 
   return (
     <>
-      <PageCover description={"Create a new Bet"} />
       <div className="mt-5 container">
+        <div className="row justify-content-center">
+          <div className="col-lg-8">
+            <h3>Create a Bet</h3>
+          </div>
+        </div>
 
         <div className="row justify-content-center">
           <div className="col-lg-8">
@@ -308,7 +310,26 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
           </div>
         </div>
       </div>
-      <Modal show={show} handleCloseModal={handleCloseModal} handleRedirect={handleRedirect} handleSucceeded={handleCloseModal} transacting={creating} success={creationSuccess} error={creationError} title={"Bet creation"} successText={"The bet was successfully created!"} />
+
+      <Modal show={show} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Bet Creation</Modal.Title>
+        </Modal.Header>
+        {creating && <Spinner animation="border" />}
+        {creationSuccess && <Modal.Body>Your bet has been successfully created</Modal.Body>}
+        {creationError && <Modal.Body>There was an error with your transaction!</Modal.Body>}
+        <Modal.Footer>
+          {(!creating && creationSuccess) && <Button variant="secondary" onClick={handleCreateNew}>
+            Create a new bet
+          </Button>}
+          {creationError && <Button variant="secondary" onClick={handleCloseModal}>
+            Close and try again
+          </Button>}
+          {!creating && <Button variant="danger" onClick={handleRedirect}>
+            Go to Events Page
+          </Button>}
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
