@@ -209,7 +209,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
           </Button>
         </div>
         <div className="row">
-          <div className="col-lg-3 col-sm-3">
+          <div className="col">
             <Form>
               <Form.Group controlId="SelectCountry">
                 <Form.Label>Country</Form.Label>
@@ -224,7 +224,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
               </Form.Group>
             </Form>
           </div>
-          <div className="col-lg-2 offset-lg-0 col-sm-3">
+          <div className="col">
             <Form>
               <Form.Group controlId="SelectCategory">
                 <Form.Label>Category</Form.Label>
@@ -239,11 +239,30 @@ export default function Event({ betContract, arbitratorContract, account, filter
               </Form.Group>
             </Form>
           </div>
-          <div className="col-lg-1 offset-lg-0 col-sm-1">
+          <div className="col">
+            <Form>
+              <Form.Group controlId="SelectCategory">
+                    <Form.Label>State</Form.Label>
+                    <Form.Control
+                        value={filters.state}
+                        onChange={stateFilterHandler}
+                        as="select"
+                        custom
+                    >
+                        {StateToText.map((value, key) => (
+                            <option value={key}>{value}</option>
+                        ))}
+                    </Form.Control>
+              </Form.Group>
+            </Form>
+          </div>
+
+                  <div className="col">
             <Form>
               <Form.Group controlId="SelectLeague">
                 <Form.Label>League</Form.Label>
                 <Form.Control
+                  className="w-100"
                   value={filters.league}
                   onChange={leagueFilterHandler}
                   as="input"
@@ -254,23 +273,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
               </Form.Group>
             </Form>
           </div>
-          <div className="col-lg-2 offset-lg-3 col-sm-3">
-            <Form>
-              <Form.Group controlId="SelectCategory">
-                <Form.Label>State</Form.Label>
-                <Form.Control
-                  value={filters.state}
-                  onChange={stateFilterHandler}
-                  as="select"
-                  custom
-                >
-                  {StateToText.map((value, key) => (
-                    <option value={key}>{value}</option>
-                  ))}
-                </Form.Control>
-              </Form.Group>
-            </Form>
-          </div>
+          
         </div>
         <div className="row">
           {loading && <p>Loading</p>}
