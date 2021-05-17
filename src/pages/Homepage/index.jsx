@@ -83,7 +83,7 @@ export default function Homepage({ account, filters, setFilters }) {
             </div>
           </div>
           <div className="row mt-3">
-            <div className="col-lg-14">
+            <div className="col">
               <div className="row">
                 <div className="col">
                   <Form>
@@ -120,6 +120,7 @@ export default function Homepage({ account, filters, setFilters }) {
                     <Form.Group controlId="SelectLeague">
                       <Form.Label>League</Form.Label>
                       <Form.Control
+                        className="w-100"
                         value={(filters.league ? filters.league : '')}
                         onChange={leagueFilterHandler}
                         as="input"
