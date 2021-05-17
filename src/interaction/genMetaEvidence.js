@@ -1,8 +1,8 @@
 export default (creator, backer, event, creatorBet) => ({
     category: 'Prediction markets',
     title: event,
-    description: 'A back-lay bet between two players.',
-    question: 'Was the outcome of the event: ' + creatorBet + '?',
+    description: 'A back-lay bet between two players on the given event.',
+    question: 'Considering the event, did the following outcome happen: ' + creatorBet + '?',
     rulingOptions: {
       type: 'single-select',
       titles: ['Yes', 'No'],

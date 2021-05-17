@@ -9,7 +9,6 @@ import Input from '../../components/form/Input';
 import Label from '../../components/form/Label';
 import Select from '../../components/form/Select';
 
-// for filters
 import { categoryOptionsArray, countryOptionsArray } from '../../const/filterMappings';
 import genMetaEvidence from '../../interaction/genMetaEvidence';
 

@@ -90,7 +90,7 @@ export default function Homepage({ account, filters, setFilters }) {
           </Link>
           <div className="col-lg-3 offset-lg-0 col-sm-1">
             <Button variant="warning" onClick={resetFilters}>
-              Show all bets
+              Show all events
                    </Button>
           </div>
         </div>
