@@ -40,7 +40,7 @@ export const EVENTS_QUERY = gql`
       }
     }
     
-    events(where: {category: $category, startTime: $minTime}, orderBy: startTime) @include(if: $categoryB) {
+    events(where: {category: $category, startTime_gt: $minTime}, orderBy: startTime) @include(if: $categoryB) {
       id
       description
       startTime

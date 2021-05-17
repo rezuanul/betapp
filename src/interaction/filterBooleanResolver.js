@@ -3,7 +3,7 @@
 
 export default function resolveFilterVariablesForQuery(filters) {
 
-  let timeStampNow = parseInt((new Date().getTime() / 1000).toFixed(0))  - 86400;
+  let timeStampNow = parseInt((new Date().getTime() / 1000).toFixed(0)) - 86400;
 
   if (filters.eventID && filters.eventID !== '') {
     return {

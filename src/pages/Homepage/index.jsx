@@ -9,34 +9,15 @@ import { countryOptionsArray, categoryOptionsArray } from '../../const/filterMap
 import resolveFilterVariablesForQuery from '../../interaction/filterBooleanResolver';
 
 import EventTable from '../../components/EventTable';
-import {STATE_OPEN} from '../../const/contractEnums';
+import { STATE_OPEN } from '../../const/contractEnums';
 import { useQuery, useLazyQuery } from '@apollo/client';
 
 import { EVENTS_QUERY } from '../../const/queries'
 
 export default function Homepage({ account, filters, setFilters }) {
 
-  // We differentiate the query variables from the state variables because
-  // they cannot be null on query, whereas we want the filters to be null
-  // when there are no selections
-  let defaultVariables = {
-    country: 0,
-    category: 0,
-    league: 'undefined',
-    minTime: parseInt((new Date().getTime() / 1000).toFixed(0)) - 86400, // Show max one day old events
-    noParams: true,
-    countryB: false,
-    categoryB: false,
-    leagueB: false,
-    countryCategoryB: false,
-    countryLeagueB: false,
-    categoryLeagueB: false,
-    countryCategoryLeagueB: false,
-  }
-
   const { loading, error, data, refetch } = useQuery(EVENTS_QUERY, {
-    variables: defaultVariables,
-    notifyOnNetworkStatusChange: true
+    variables: resolveFilterVariablesForQuery(filters)
   });
 
   const countryFilterHandler = async (e) => {
@@ -87,75 +68,77 @@ export default function Homepage({ account, filters, setFilters }) {
   }
 
   return (
-    <div className="homepage">
+    <>
       <PageCover description={"Search upcoming events"} />
-      <div className="mt-5 container">
-        <div className="row">
-          <Link to="/create-bet" className="btn btn-danger btn-block">
-            Create a Bet
+      <div className="homepage">
+        <div className="mt-5 container">
+          <div className="row">
+            <Link to="/create-bet" className="btn btn-danger btn-block">
+              Create a Bet
           </Link>
-          <div className="col-lg-3 offset-lg-0 col-sm-1 mt-3">
-            <Button variant="warning" onClick={resetFilters}>
-              Show all events
+            <div className="col-lg-3 offset-lg-0 col-sm-1 mt-3">
+              <Button variant="warning" onClick={resetFilters}>
+                Show all events
              </Button>
-          </div>
-        </div>
-        <div className="row mt-3">
-          <div className="col-lg-14">
-            <div className="row">
-              <div className="col">
-                <Form>
-                  <Form.Group controlId="SelectCountry">
-                    <Form.Label>Country</Form.Label>
-                    <Form.Control
-                      value={filters.country}
-                      onChange={countryFilterHandler}
-                      as="select"
-                      custom
-                    >
-                      {countryOptionsArray}
-                    </Form.Control>
-                  </Form.Group>
-                </Form>
-              </div>
-              <div className="col">
-                <Form>
-                  <Form.Group controlId="SelectCategory">
-                    <Form.Label>Category</Form.Label>
-                    <Form.Control
-                      value={filters.category}
-                      onChange={categoryFilterHandler}
-                      as="select"
-                      custom
-                    >
-                      {categoryOptionsArray}
-                    </Form.Control>
-                  </Form.Group>
-                </Form>
-              </div>
-              <div className="col">
-                <Form>
-                  <Form.Group controlId="SelectLeague">
-                    <Form.Label>League</Form.Label>
-                    <Form.Control
-                      value={(filters.league ? filters.league : '')}
-                      onChange={leagueFilterHandler}
-                      as="input"
-                      custom
-                    >
-
-                    </Form.Control>
-                  </Form.Group>
-                </Form>
-              </div>
             </div>
-            {error && <div><p>Error loading data</p></div>}
-            <div className="bet-tab">
-              <EventTable betData={data && { data }} error={error} loading={loading} showBetsHandler={showBetsHandler} />
+          </div>
+          <div className="row mt-3">
+            <div className="col-lg-14">
+              <div className="row">
+                <div className="col">
+                  <Form>
+                    <Form.Group controlId="SelectCountry">
+                      <Form.Label>Country</Form.Label>
+                      <Form.Control
+                        value={filters.country}
+                        onChange={countryFilterHandler}
+                        as="select"
+                        custom
+                      >
+                        {countryOptionsArray}
+                      </Form.Control>
+                    </Form.Group>
+                  </Form>
+                </div>
+                <div className="col">
+                  <Form>
+                    <Form.Group controlId="SelectCategory">
+                      <Form.Label>Category</Form.Label>
+                      <Form.Control
+                        value={filters.category}
+                        onChange={categoryFilterHandler}
+                        as="select"
+                        custom
+                      >
+                        {categoryOptionsArray}
+                      </Form.Control>
+                    </Form.Group>
+                  </Form>
+                </div>
+                <div className="col">
+                  <Form>
+                    <Form.Group controlId="SelectLeague">
+                      <Form.Label>League</Form.Label>
+                      <Form.Control
+                        value={(filters.league ? filters.league : '')}
+                        onChange={leagueFilterHandler}
+                        as="input"
+                        custom
+                      >
+
+                      </Form.Control>
+                    </Form.Group>
+                  </Form>
+                </div>
+              </div>
+              {error && <div><p>Error loading data</p></div>}
+              <div className="bet-tab">
+                <EventTable betData={data && { data }} error={error} loading={loading} showBetsHandler={showBetsHandler} />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

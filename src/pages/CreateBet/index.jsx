@@ -139,9 +139,8 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
 
   return (
     <>
+      <PageCover description={"Create a new Bet"} />
       <div className="mt-5 container">
-        <PageCover description={"Create a new Bet"} />
-
         <div className="row justify-content-center">
           <div className="col-lg-8">
             <form onSubmit={formikForm.handleSubmit}>
