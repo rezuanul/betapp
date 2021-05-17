@@ -54,7 +54,7 @@ function App() {
     country: '',
     category: '',
     league: undefined, // The undefined value, We can't give the parameter as undefined to the query, and we want to also query the empty string.
-    eventID: null 
+    eventID: null // For showing the bets under one event. Overridden if any other filter is selected.
   })
 
   /// called on every render. "Listens" to account changes.

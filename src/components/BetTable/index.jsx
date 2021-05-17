@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
-import Modal from '../../components/Modal';
 import { categoryOptions, countryOptions } from '../../const/filterMappings';
+import {
+    NO_OUTCOME,
+    BACKER_WINS,
+    CREATOR_WINS,
+    STATE_OPEN,
+    STATE_VOTING,
+    STATE_AGREEMENT,
+    STATE_DISAGREEMENT,
+    STATE_DISPUTED,
+    STATE_RESOLVED,
+    STATE_REFUNDED
+} from '../../const/contractEnums';
 
-import { useHistory } from 'react-router-dom';
-
-const NO_OUTCOME = 0;
-const CREATOR_WINS = 1;
-const BACKER_WINS = 2;
-
-const STATE_OPEN = 0;
-const STATE_VOTING = 1;
-const STATE_AGREEMENT = 2;
-const STATE_DISAGREEMENT = 3;
-const STATE_DISPUTED = 4;
-const STATE_RESOLVED = 5;
-const STATE_REFUNDED = 6;
-
-export default function BetTable({ betContract, arbitratorContract, account, betData }) {
+export default function BetTable({ betData,
+    account,
+    backBetHandler,
+    voteHandler,
+    disputeBetHandler,
+    refundBetHandler,
+    claimWinningsHandler
+}) {
 
     /*const data = [0, 1, 2, 3, 4, 5, 6, 7].map((idd) => ({
         id: idd,
@@ -36,90 +40,6 @@ export default function BetTable({ betContract, arbitratorContract, account, bet
         disputeID: null,
         _metaEvidence: 'ipfs/kaf324ggmja3432gkmvjfdsnvakfoksdoi325'
     }));*/
-
-    const history = useHistory();
-    const [show, setShow] = useState(false);
-    const [transactionSuccess, setTransactionSuccess] = useState(false);
-    const [transacting, setTransacting] = useState(false);
-    const [transactionError, setTransactionError] = useState(false);
-
-
-    const handleCloseModal = () => {
-        setShow(false);
-        setTransacting(false);
-        setTransactionSuccess(false);
-        setTransactionError(false);
-    }
-
-    const handleOpenModal = () => {
-        setShow(true);
-        setTransacting(true);
-        setTransactionSuccess(false);
-        setTransactionError(false);
-    };
-
-
-    const handleRedirect = () => {
-        setShow(false);
-        history.push('/event');
-    };
-
-    const handleTransactionError = () => {
-        setTransacting(false);
-        setTransactionError(true);
-
-    }
-
-    const handleTransactionSuccessful = () => {
-        setTransacting(false);
-        setTransactionSuccess(true);
-    }
-
-    const backBetHandler = async (betID, stake) => {
-        handleOpenModal();
-        betContract.methods
-            .placeBet(betID)
-            .send({ from: account, value: stake })
-            .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
-
-    }
-
-    const layerWinsHandler = async (betID) => {
-        handleOpenModal();
-        betContract.methods
-            .voteOnOutcome(betID, CREATOR_WINS)
-            .send({ from: account })
-            .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
-    }
-    const backerWinsHandler = async (betID) => {
-        handleOpenModal();
-        betContract.methods
-            .voteOnOutcome(betID, BACKER_WINS)
-            .send({ from: account })
-            .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
-    }
-    const disputeBetHandler = async (betID) => {
-        handleOpenModal();
-        let arbitrationCost = await arbitratorContract.methods.arbitrationCost("0x00").call();
-        betContract.methods
-            .createDispute(betID)
-            .send({ from: account, value: arbitrationCost })
-            .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
-    }
-    const refundBetHandler = async (betID) => {
-        handleOpenModal();
-        betContract.methods
-            .refund(betID)
-            .send({ from: account })
-            .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
-    }
-    const claimWinningsHandler = async (betID) => {
-        handleOpenModal();
-        betContract.methods
-            .claimWinnings(betID)
-            .send({ from: account })
-            .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
-    }
 
     return (
         <>
@@ -226,19 +146,22 @@ export default function BetTable({ betContract, arbitratorContract, account, bet
                                             && (bet.creator === account || bet.backer === account)
                                             && !((bet.creator === account && bet.creatorHasVoted) || (bet.backer === account && bet.backerHasVoted))) ?
                                             (<div>
-                                                <button id="layerWins" onClick={() => layerWinsHandler(bet.id)} className="btn btn-light btn-block">
+                                                <button id="creatorWins" onClick={() => voteHandler(bet.id, CREATOR_WINS)} className="btn btn-light btn-block">
                                                     Creator wins
                                                 </button>
-                                                <button id="backerWins" onClick={() => backerWinsHandler(bet.id)} className="btn btn-light btn-block">
+                                                <button id="backerWins" onClick={() => voteHandler(bet.id, BACKER_WINS)} className="btn btn-light btn-block">
                                                     Backer wins
                                                 </button>
+                                                <button id="noOutcome" onClick={() => voteHandler(bet.id, NO_OUTCOME)} className="btn btn-light btn-block">
+                                                    Undecidable
+                                                </button>
                                             </div>
-                                            ) : (bet.state === STATE_VOTING && "Voted")}
+                                            ) : (bet.state === STATE_VOTING && <p>Voted</p>)}
 
                                         {(bet.state === STATE_DISAGREEMENT && (bet.creator === account || bet.backer === account)) &&
                                             <button id="dispute" onClick={() => disputeBetHandler(bet.id)} className="btn btn-danger btn-block">
                                                 Dispute
-                                    </button>}
+                                            </button>}
                                         {((bet.outcome === NO_OUTCOME) && ((bet.state === STATE_VOTING && bet.votingDeadline < new Date().getTime() / 1000)
                                             || bet.state === STATE_AGREEMENT
                                             || (bet.state === STATE_OPEN && bet.stakingDeadline < new Date().getTime() / 1000)
@@ -252,9 +175,9 @@ export default function BetTable({ betContract, arbitratorContract, account, bet
                                             <button id="claimWinnings" onClick={() => claimWinningsHandler(bet.id)} className="btn btn-success btn-block">
                                                 ClaimWinnings
                                     </button>}
-                                    {bet.state === STATE_REFUNDED && <p>Refunded</p>}
-                                    {bet.state === STATE_RESOLVED && <p>Resolved</p>}
-                                    {bet.state === STATE_DISPUTED && <a href={"https://court.kleros.io/cases/" + bet.disputeID}>In arbitration</a>}
+                                        {bet.state === STATE_REFUNDED && <p>Refunded</p>}
+                                        {bet.state === STATE_RESOLVED && <p>Resolved</p>}
+                                        {bet.state === STATE_DISPUTED && <a href={"https://court.kleros.io/cases/" + bet.disputeID}>In arbitration</a>}
                                     </div>
                                 </td>
                             </tr>
@@ -262,16 +185,6 @@ export default function BetTable({ betContract, arbitratorContract, account, bet
                     </tbody>
                 </table>
             </div>
-            <Modal show={show}
-                handleCloseModal={handleCloseModal}
-                handleRedirect={handleRedirect}
-                handleSucceeded={handleCloseModal}
-                transacting={transacting}
-                success={transactionSuccess}
-                error={transactionError}
-                title={"Transaction"}
-                successText={"Transaction successful!"}
-                successButtonText={"Close"} />
         </>
     );
 }

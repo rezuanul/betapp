@@ -18,7 +18,7 @@ export default function Homepage({ account, filters, setFilters }) {
   // We differentiate the query variables from the state variables because
   // they cannot be null on query, whereas we want the filters to be null
   // when there are no selections
-  let queryVariables = {
+  let defaultVariables = {
     country: 0,
     category: 0,
     league: 'undefined',
@@ -29,11 +29,11 @@ export default function Homepage({ account, filters, setFilters }) {
     countryCategoryB: false,
     countryLeagueB: false,
     categoryLeagueB: false,
-    countryCategoryLeagueB: false
+    countryCategoryLeagueB: false,
   }
 
   const { loading, error, data, refetch } = useQuery(EVENTS_QUERY, {
-    variables: queryVariables,
+    variables: defaultVariables,
     notifyOnNetworkStatusChange: true
   });
 
@@ -66,6 +66,7 @@ export default function Homepage({ account, filters, setFilters }) {
       filters.league = undefined;
       filters.category = '';
       filters.country = '';
+      filters.eventID = null;
       return filters;
     });
 
@@ -89,7 +90,7 @@ export default function Homepage({ account, filters, setFilters }) {
           </Link>
           <div className="col-lg-3 offset-lg-0 col-sm-1">
             <Button variant="warning" onClick={resetFilters}>
-              Reset filters
+              Show all bets
                    </Button>
           </div>
         </div>

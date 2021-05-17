@@ -2,6 +2,24 @@
 // and changes the variables to not null so that the query succeeds.
 
 export default function resolveFilterVariablesForQuery(filters) {
+  if (filters.eventID && filters.eventID !== '') {
+    return {
+      country: 0,
+      category: 0,
+      league: '',
+      noParams: false,
+      countryB: false,
+      categoryB: false,
+      leagueB: false,
+      countryCategoryB: false,
+      countryLeagueB: false,
+      categoryLeagueB: false,
+      countryCategoryLeagueB: false,
+      eventID: filters.eventID,
+      eventIDGiven: true
+    }
+  }
+
   let queryVariables = {
     noParams: (filters.category === ''
       && filters.country === ''
@@ -29,7 +47,9 @@ export default function resolveFilterVariablesForQuery(filters) {
       countryCategoryB: false,
       countryLeagueB: false,
       categoryLeagueB: false,
-      countryCategoryLeagueB: true
+      countryCategoryLeagueB: true,
+      eventID: '',
+      eventIDGiven: false
     };
 
   } else {
@@ -46,7 +66,9 @@ export default function resolveFilterVariablesForQuery(filters) {
         countryCategoryB: true,
         countryLeagueB: false,
         categoryLeagueB: false,
-        countryCategoryLeagueB: false
+        countryCategoryLeagueB: false,
+        eventID: '',
+        eventIDGiven: false
       };
     } else if (queryVariables.countryLeagueB) {
       return {
@@ -60,7 +82,9 @@ export default function resolveFilterVariablesForQuery(filters) {
         countryCategoryB: false,
         countryLeagueB: true,
         categoryLeagueB: false,
-        countryCategoryLeagueB: false
+        countryCategoryLeagueB: false,
+        eventID: '',
+        eventIDGiven: false
       };
     } else if (queryVariables.categoryLeagueB) {
       return {
@@ -74,23 +98,27 @@ export default function resolveFilterVariablesForQuery(filters) {
         countryCategoryB: false,
         countryLeagueB: false,
         categoryLeagueB: true,
-        countryCategoryLeagueB: false
+        countryCategoryLeagueB: false,
+        eventID: '',
+        eventIDGiven: false
       };
 
     } else {
       if (queryVariables.countryB) {
         return {
-            country: parseInt(filters.country),
-            category: 0,
-            league: '',
-            noParams: false,
-            countryB: true,
-            categoryB: false,
-            leagueB: false,
-            countryCategoryB: false,
-            countryLeagueB: false,
-            categoryLeagueB: false,
-            countryCategoryLeagueB: false
+          country: parseInt(filters.country),
+          category: 0,
+          league: '',
+          noParams: false,
+          countryB: true,
+          categoryB: false,
+          leagueB: false,
+          countryCategoryB: false,
+          countryLeagueB: false,
+          categoryLeagueB: false,
+          countryCategoryLeagueB: false,
+          eventID: '',
+          eventIDGiven: false
         };
       } else if (queryVariables.categoryB) {
         return {
@@ -104,7 +132,9 @@ export default function resolveFilterVariablesForQuery(filters) {
           countryCategoryB: false,
           countryLeagueB: false,
           categoryLeagueB: false,
-          countryCategoryLeagueB: false
+          countryCategoryLeagueB: false,
+          eventID: '',
+          eventIDGiven: false
         };
       } else if (queryVariables.leagueB) {
         return {
@@ -118,7 +148,9 @@ export default function resolveFilterVariablesForQuery(filters) {
           countryCategoryB: false,
           countryLeagueB: false,
           categoryLeagueB: false,
-          countryCategoryLeagueB: false
+          countryCategoryLeagueB: false,
+          eventID: '',
+          eventIDGiven: false
         };
 
       } else {
@@ -133,7 +165,9 @@ export default function resolveFilterVariablesForQuery(filters) {
           countryCategoryB: false,
           countryLeagueB: false,
           categoryLeagueB: false,
-          countryCategoryLeagueB: false
+          countryCategoryLeagueB: false,
+          eventID: '',
+          eventIDGiven: false
         };
 
       }
