@@ -15,28 +15,9 @@ import { StateToText, STATE_DISAGREEMENT, STATE_OPEN } from '../../const/contrac
 
 export default function Event({ betContract, arbitratorContract, account, filters, setFilters, archon, ipfsClient }) {
 
-  let defaultVariables = {
-    country: (filters.country ? parseInt(filters.country) : 0),
-    category: (filters.category ? parseInt(filters.category) : 0),
-    league: (filters.league ? filters.league : ''),
-    state: STATE_OPEN,
-    minTime: parseInt((new Date().getTime() / 1000).toFixed(0)) - 86400,
-    noParams: false,
-    countryB: false,
-    categoryB: false,
-    leagueB: false,
-    countryCategoryB: false,
-    countryLeagueB: false,
-    categoryLeagueB: false,
-    countryCategoryLeagueB: false,
-    eventID: (filters.eventID ? filters.eventID : ''),
-    eventIDGiven: false,
-  }
-
   const { loading, error, data, refetch, networkStatus } = useQuery(GET_BETS,
     {
-      variables: resolveFilterVariablesForQuery(filters),
-      notifyOnNetworkStatusChange: true
+      variables: resolveFilterVariablesForQuery(filters)
     });
 
   // MODAL
@@ -273,11 +254,11 @@ export default function Event({ betContract, arbitratorContract, account, filter
           </div>
         </div>
         <div className="row">
-          {loading && <p>Loading</p>}
-          {error && <p>There was an error loading</p>}
           <BetTable
             account={account}
             betData={data && { data }}
+            error={error}
+            loading={loading}
             backBetHandler={backBetHandler}
             voteHandler={voteHandler}
             disputeBetHandler={disputeBetHandler}

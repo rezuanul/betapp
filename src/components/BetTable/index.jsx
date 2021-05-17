@@ -13,7 +13,10 @@ import {
     STATE_REFUNDED
 } from '../../const/contractEnums';
 
-export default function BetTable({ betData,
+export default function BetTable({
+    betData,
+    error,
+    loading,
     account,
     backBetHandler,
     voteHandler,
@@ -182,6 +185,26 @@ export default function BetTable({ betData,
                                 </td>
                             </tr>
                         ))}
+                        {loading &&
+                            <tr>
+                                <td colSpan={4}>
+                                    <div className="d-flex">
+                                        <div className="content">
+                                            <span className="name d-block">{'Loading bets'}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>}
+                        {error &&
+                            <tr>
+                                <td colSpan={4}>
+                                    <div className="d-flex">
+                                        <div className="content">
+                                            <span className="name d-block">{'An error happened while loading the bets'}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>}
                     </tbody>
                 </table>
             </div>

@@ -14,15 +14,7 @@ import Web3 from 'web3'
 import Archon from '@kleros/archon'
 import { create } from 'ipfs-http-client'
 
-import {
-  STATE_OPEN,
-  STATE_VOTING,
-  STATE_AGREEMENT,
-  STATE_DISAGREEMENT,
-  STATE_DISPUTED,
-  STATE_RESOLVED,
-  STATE_REFUNDED
-} from './const/contractEnums';
+import { STATE_OPEN } from './const/contractEnums';
 
 const BET_CONTRACT_ADDRESS = "0x2E6318CC9006f132265fDBf9F68569172101Bb6f";
 const ARBITRATOR_CONTRACT_ADDRESS = "0xB767De12E3c01F31a437Edc69016D4d6E09bcc68"
@@ -65,7 +57,7 @@ function App() {
     category: '',
     league: undefined, // The undefined value, We can't give the parameter as undefined to the query, and we want to also query the empty string.
     eventID: null, // For showing the bets under one event. Overridden if any other filter is selected.
-    states: STATE_OPEN,
+    state: STATE_OPEN,
     account: ''
   })
 

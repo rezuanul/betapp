@@ -11,9 +11,7 @@ export default function Navbar(connectMetamaskHandler) {
     {
       key: 1,
       text: 'Events',
-      route: '/',
-      showForLoggedIn: true,
-      showForLoggedOut: true,
+      route: '/'
     },
   ];
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function EventTable({ betData, error, loading, showBetsHandler }) {
+
   return (
     <div className="table-responsive">
       <table className="table table-striped table-bordered">
@@ -45,7 +46,7 @@ export default function EventTable({ betData, error, loading, showBetsHandler })
               <td colSpan={4}>
                 <div className="d-flex">
                   <div className="content">
-                    <span className="name d-block">{'Loading bets'}</span>
+                    <span className="name d-block">{'Loading events'}</span>
                   </div>
                 </div>
               </td>
@@ -55,7 +56,7 @@ export default function EventTable({ betData, error, loading, showBetsHandler })
               <td colSpan={4}>
                 <div className="d-flex">
                   <div className="content">
-                    <span className="name d-block">{'An error happened while loading the bets bets'}</span>
+                    <span className="name d-block">{'An error happened while loading the events'}</span>
                   </div>
                 </div>
               </td>
