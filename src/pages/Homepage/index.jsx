@@ -23,6 +23,7 @@ export default function Homepage({ account, filters, setFilters }) {
     country: 0,
     category: 0,
     league: 'undefined',
+    minTime: parseInt((new Date().getTime() / 1000).toFixed(0)) - 86400, // Show max one day old events
     noParams: true,
     countryB: false,
     categoryB: false,

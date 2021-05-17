@@ -20,6 +20,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
     category: (filters.category ? parseInt(filters.category) : 0),
     league: (filters.league ? filters.league : ''),
     state: STATE_OPEN,
+    minTime: parseInt((new Date().getTime() / 1000).toFixed(0)) - 86400,
     noParams: false,
     countryB: false,
     categoryB: false,
@@ -138,7 +139,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
         filters.account = '';
         return filters;
       });
-     e.target.innerText = 'Show your bets';
+      e.target.innerText = 'Show your bets';
     } else {
       await setFilters(filters => {
         filters.account = account;

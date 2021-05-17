@@ -5,6 +5,7 @@ export const EVENTS_QUERY = gql`
     query getEvents($country: Int,
                   $category: Int,
                   $league: String,
+                  $minTime: Int,
                   $noParams: Boolean!,
                   $countryB: Boolean!,
                   $categoryB: Boolean!,
@@ -15,7 +16,7 @@ export const EVENTS_QUERY = gql`
                   $countryCategoryLeagueB: Boolean!
                    ) {
                     
-    events(orderBy: startTime) @include(if: $noParams) {
+    events(orderBy: startTime, where: {startTime_gt: $minTime}) @include(if: $noParams) {
       id
       description
       startTime
@@ -27,7 +28,7 @@ export const EVENTS_QUERY = gql`
       }
     }
                     
-    events(where: {country: $country}, orderBy: startTime) @include(if: $countryB) {
+    events(where: {country: $country, startTime_gt: $minTime}, orderBy: startTime) @include(if: $countryB) {
       id
       description
       startTime
@@ -39,7 +40,7 @@ export const EVENTS_QUERY = gql`
       }
     }
     
-    events(where: {category: $category}, orderBy: startTime) @include(if: $categoryB) {
+    events(where: {category: $category, startTime: $minTime}, orderBy: startTime) @include(if: $categoryB) {
       id
       description
       startTime
@@ -52,7 +53,7 @@ export const EVENTS_QUERY = gql`
     }
                     
                         
-    events(where: {league_contains: $league}, orderBy: startTime) @include(if: $leagueB) {
+    events(where: {league_contains: $league, startTime_gt: $minTime}, orderBy: startTime) @include(if: $leagueB) {
       id
       description
       startTime
@@ -64,7 +65,7 @@ export const EVENTS_QUERY = gql`
       }
     }
                     
-    events(where: { country: $country, category: $category}, orderBy: startTime) @include(if: $countryCategoryB) {
+    events(where: { country: $country, category: $category, startTime_gt: $minTime}, orderBy: startTime) @include(if: $countryCategoryB) {
       id
       description
       startTime
@@ -76,7 +77,7 @@ export const EVENTS_QUERY = gql`
       }
     }  
   
-    events(where: { country: $country, league_contains: $league}, orderBy: startTime) @include(if: $countryLeagueB) {
+    events(where: { country: $country, league_contains: $league, startTime_gt: $minTime}, orderBy: startTime) @include(if: $countryLeagueB) {
       id
       description
       startTime
@@ -88,7 +89,7 @@ export const EVENTS_QUERY = gql`
       }
     }  
                     
-    events(where: { category: $category, league_contains: $league}, orderBy: startTime) @include(if: $categoryLeagueB) {
+    events(where: { category: $category, league_contains: $league, startTime_gt: $minTime}, orderBy: startTime) @include(if: $categoryLeagueB) {
       id
       description
       startTime
@@ -100,7 +101,7 @@ export const EVENTS_QUERY = gql`
       }
     }  
                     
-    events(where: { country: $country, category: $category, league_contains: $league}, orderBy: startTime) @include(if: $countryCategoryLeagueB) {
+    events(where: { country: $country, category: $category, league_contains: $league, startTime_gt: $minTime}, orderBy: startTime) @include(if: $countryCategoryLeagueB) {
       id
       description
       startTime

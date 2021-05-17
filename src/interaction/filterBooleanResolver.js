@@ -3,12 +3,15 @@
 
 export default function resolveFilterVariablesForQuery(filters) {
 
+  let timeStampNow = parseInt((new Date().getTime() / 1000).toFixed(0))  - 86400;
+
   if (filters.eventID && filters.eventID !== '') {
     return {
       country: 0,
       category: 0,
       league: '',
       state: filters.state,
+      minTime: timeStampNow,
       account: filters.account,
       noParams: false,
       countryB: false,
@@ -44,6 +47,7 @@ export default function resolveFilterVariablesForQuery(filters) {
       category: parseInt(filters.category),
       league: filters.league,
       state: filters.state,
+      minTime: timeStampNow,
       account: filters.account,
       noParams: false,
       countryB: false,
@@ -65,6 +69,7 @@ export default function resolveFilterVariablesForQuery(filters) {
         category: parseInt(filters.category),
         league: '',
         state: filters.state,
+        minTime: timeStampNow,
         account: filters.account,
         noParams: false,
         countryB: false,
@@ -83,6 +88,7 @@ export default function resolveFilterVariablesForQuery(filters) {
         category: 0,
         league: filters.league,
         state: filters.state,
+        minTime: timeStampNow,
         account: filters.account,
         noParams: false,
         countryB: false,
@@ -101,6 +107,7 @@ export default function resolveFilterVariablesForQuery(filters) {
         category: parseInt(filters.category),
         league: filters.league,
         state: filters.state,
+        minTime: timeStampNow,
         account: filters.account,
         noParams: false,
         countryB: false,
@@ -121,6 +128,7 @@ export default function resolveFilterVariablesForQuery(filters) {
           category: 0,
           league: '',
           state: filters.state,
+          minTime: timeStampNow,
           account: filters.account,
           noParams: false,
           countryB: true,
@@ -139,6 +147,7 @@ export default function resolveFilterVariablesForQuery(filters) {
           country: 0,
           league: '',
           state: filters.state,
+          minTime: timeStampNow,
           account: filters.account,
           noParams: false,
           countryB: false,
@@ -157,6 +166,7 @@ export default function resolveFilterVariablesForQuery(filters) {
           league: filters.league,
           country: 0,
           state: filters.state,
+          minTime: timeStampNow,
           account: filters.account,
           noParams: false,
           countryB: false,
@@ -176,6 +186,7 @@ export default function resolveFilterVariablesForQuery(filters) {
           category: 0,
           league: '',
           state: filters.state,
+          minTime: timeStampNow,
           account: filters.account,
           noParams: true,
           countryB: false,
