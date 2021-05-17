@@ -163,7 +163,7 @@ export default function BetTable({ betContract, account, betData }) {
                                 </td>
                                 <td>
                                     <div>
-                                        <span className="name d-block">{(bet.creatorStake / 1000000000000000000)} ETH </span>
+                                        <span className="name d-block">{bet.creatorBetDescription}</span>
                                     </div>
                                 </td>
                                 {
