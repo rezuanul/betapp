@@ -15,22 +15,29 @@ const _ALL = gql`
     query getAll{
       bets{
         id
-        creator
+        description
         creatorBetDescription
+        creator
         creatorStake
+        stakingDeadline
         backer
         backerStake
-        description
         timeCreated
+        outcome
         state
         league
         category
         country
+        creatorHasVoted
+        backerHasVoted
+        creatorProvidedEvidence
+        backerProvidedEvidence
+        disputeID
       }
     }
 `;
 
-export default function Event({ betContract, account, filters, setFilters, archon, ipfsClient }) {
+export default function Event({ betContract, arbitratorContract, account, filters, setFilters, archon, ipfsClient }) {
   const { loading, error, data, refetch, networkStatus } = useQuery(_ALL, { notifyOnNetworkStatusChange: true });
 
   const countryFilterHandler = (e) => {
@@ -121,7 +128,7 @@ export default function Event({ betContract, account, filters, setFilters, archo
           </div>
         </div>
         <div className="row">
-          <BetTable account={account} betContract={betContract} betData={data && { data }} />
+          <BetTable account={account} betContract={betContract} betData={data && { data }} arbitratorContract={arbitratorContract} />
         </div>
       </div>
     </div>

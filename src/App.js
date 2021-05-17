@@ -35,7 +35,7 @@ function App() {
     Arbitrator,
     ARBITRATOR_CONTRACT_ADDRESS
   )
-
+  
   // Utilities for submitting evidence
   const archon = new Archon('http://127.0.0.1:8545');
   archon.setIpfsGateway('http://127.0.0.1:8080');
@@ -105,6 +105,7 @@ function App() {
         />} />
         <Route exact path="/event" render={props => <Event
           betContract={betContract}
+          arbitratorContract={arbitratorContract}
           account={account}
           filters={filters}
           setFilters={setFilters}

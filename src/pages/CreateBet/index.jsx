@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -35,7 +33,10 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
 
 
   const { loading, error, data, refetch } = useQuery(LEAGUES_QUERY, {
-    variables: filters,
+    variables: {
+      country: parseInt(filters.country),
+      category: parseInt(filters.category)
+    },
     notifyOnNetworkStatusChange: true
   });
 
@@ -206,11 +207,17 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
                   error={formikForm.errors.country}
                   onChange={e => {
                     formikForm.handleChange(e);
-                    setFilters({
-                      ...filters,
-                      country: Number(e.currentTarget.value)
+                    setFilters(filters => {
+                      filters.country = e.target.value;
+                      return filters;
                     });
-                    refetch({ variables: filters });
+                    console.log(filters)
+                    refetch({
+                      variables: {
+                        category: parseInt(filters.category),
+                        country: parseInt(filters.country)
+                      }
+                    });
                   }}
                   touched={formikForm.touched.country}
                   name='country'
@@ -228,11 +235,16 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
                   error={formikForm.errors.category}
                   onChange={e => {
                     formikForm.handleChange(e);
-                    setFilters({
-                      ...filters,
-                      category: Number(e.currentTarget.value)
+                    setFilters(filters => {
+                      filters.category = e.target.value;
+                      return filters;
                     });
-                    refetch({ variables: filters });
+                    refetch({
+                      variables: {
+                        category: parseInt(filters.category),
+                        country: parseInt(filters.country)
+                      }
+                    });
                   }}
                   touched={formikForm.touched.category}
                   name='category'
@@ -254,7 +266,6 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
                   error={formikForm.errors.league}
                   touched={formikForm.touched.league}
                   autoCompleteOptions={data && Array.from(data.leagues.map((league) => <option key={league.league}>{league.league}</option>))}
-                  autoComplete="off"
                 />
               </div>
 
@@ -308,7 +319,17 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
           </div>
         </div>
       </div>
-      <Modal show={show} handleCloseModal={handleCloseModal} handleRedirect={handleRedirect} handleSucceeded={handleCloseModal} transacting={creating} success={creationSuccess} error={creationError} title={"Bet creation"} successText={"The bet was successfully created!"} />
+      <Modal
+        show={show}
+        handleCloseModal={handleCloseModal}
+        handleRedirect={handleRedirect}
+        handleSucceeded={handleCloseModal}
+        transacting={creating}
+        success={creationSuccess}
+        error={creationError}
+        title={"Bet creation"}
+        successText={"The bet was successfully created!"}
+        successButtonText={"Close and create a new bet"} />
     </>
   );
 }

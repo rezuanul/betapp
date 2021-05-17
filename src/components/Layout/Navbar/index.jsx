@@ -10,7 +10,7 @@ export default function Navbar(connectMetamaskHandler) {
   const primaryRoutes = [
     {
       key: 1,
-      text: 'Home',
+      text: 'Events',
       route: '/',
       showForLoggedIn: true,
       showForLoggedOut: true,

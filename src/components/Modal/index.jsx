@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 
-export default function TransactionModal({ show, handleCloseModal, handleRedirect, handleSucceeded, transacting, success, error, title, successText }) {
+export default function TransactionModal({ show, handleCloseModal, handleRedirect, handleSucceeded, transacting, success, error, title, successText, successButtonText }) {
 
     return (
         <Modal show={show} onHide={handleCloseModal}>
@@ -15,7 +15,7 @@ export default function TransactionModal({ show, handleCloseModal, handleRedirec
             {error && <Modal.Body>There was an error with your transaction!</Modal.Body>}
             <Modal.Footer>
                 {(!transacting && success) && <Button variant="secondary" onClick={handleSucceeded}>
-                    Create a new bet
+                    {successButtonText}
           </Button>}
                 {error && <Button variant="secondary" onClick={handleCloseModal}>
                     Close and try again

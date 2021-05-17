@@ -34,7 +34,7 @@ export default function EventTable({ betData, error, loading, showBetsHandler })
 
               </td>
               <td>
-                <Link to="/event" className="btn btn-danger" onClick={() => showBetsHandler(event.id)}>
+                <Link to="/event" className="btn btn-primary" onClick={() => showBetsHandler(event.id)}>
                   Show Bets
                 </Link>
               </td>

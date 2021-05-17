@@ -1,13 +1,18 @@
 [
 	{
-		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": true,
-				"internalType": "contract Arbitrator",
-				"name": "_arbitrator",
-				"type": "address"
-			},
+				"internalType": "uint256",
+				"name": "_arbitrationPrice",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
 			{
 				"indexed": true,
 				"internalType": "uint256",
@@ -15,80 +20,18 @@
 				"type": "uint256"
 			},
 			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "_metaEvidenceID",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "_evidenceGroupID",
-				"type": "uint256"
+				"indexed": true,
+				"internalType": "contract Arbitrable",
+				"name": "_arbitrable",
+				"type": "address"
 			}
 		],
-		"name": "Dispute",
+		"name": "AppealDecision",
 		"type": "event"
 	},
 	{
 		"anonymous": false,
 		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "contract Arbitrator",
-				"name": "_arbitrator",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "_evidenceGroupID",
-				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "_party",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "_evidence",
-				"type": "string"
-			}
-		],
-		"name": "Evidence",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "_metaEvidenceID",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "_evidence",
-				"type": "string"
-			}
-		],
-		"name": "MetaEvidence",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "contract Arbitrator",
-				"name": "_arbitrator",
-				"type": "address"
-			},
 			{
 				"indexed": true,
 				"internalType": "uint256",
@@ -96,38 +39,217 @@
 				"type": "uint256"
 			},
 			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "_ruling",
-				"type": "uint256"
-			}
-		],
-		"name": "Ruling",
-		"type": "event"
-	},
-	{
-		"inputs": [],
-		"name": "arbitrator",
-		"outputs": [
-			{
-				"internalType": "contract Arbitrator",
-				"name": "",
+				"indexed": true,
+				"internalType": "contract Arbitrable",
+				"name": "_arbitrable",
 				"type": "address"
 			}
 		],
-		"stateMutability": "view",
-		"type": "function"
+		"name": "AppealPossible",
+		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "arbitratorExtraData",
-		"outputs": [
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "_disputeID",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "contract Arbitrable",
+				"name": "_arbitrable",
+				"type": "address"
+			}
+		],
+		"name": "DisputeCreation",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_disputeID",
+				"type": "uint256"
+			},
 			{
 				"internalType": "bytes",
-				"name": "",
+				"name": "_extraData",
 				"type": "bytes"
 			}
 		],
+		"name": "appeal",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_disputeID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes",
+				"name": "_extraData",
+				"type": "bytes"
+			}
+		],
+		"name": "appealCost",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "fee",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_disputeID",
+				"type": "uint256"
+			}
+		],
+		"name": "appealPeriod",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "start",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "end",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "_extraData",
+				"type": "bytes"
+			}
+		],
+		"name": "arbitrationCost",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "fee",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_choices",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes",
+				"name": "_extraData",
+				"type": "bytes"
+			}
+		],
+		"name": "createDispute",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "disputeID",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_disputeID",
+				"type": "uint256"
+			}
+		],
+		"name": "currentRuling",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "ruling",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_disputeID",
+				"type": "uint256"
+			}
+		],
+		"name": "disputeStatus",
+		"outputs": [
+			{
+				"internalType": "enum Arbitrator.DisputeStatus",
+				"name": "status",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "disputes",
+		"outputs": [
+			{
+				"internalType": "contract Arbitrable",
+				"name": "arbitrated",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "choices",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "fee",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "ruling",
+				"type": "uint256"
+			},
+			{
+				"internalType": "enum Arbitrator.DisputeStatus",
+				"name": "status",
+				"type": "uint8"
+			}
+		],
 		"stateMutability": "view",
 		"type": "function"
 	},
@@ -144,7 +266,33 @@
 				"type": "uint256"
 			}
 		],
-		"name": "rule",
+		"name": "giveRuling",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_arbitrationPrice",
+				"type": "uint256"
+			}
+		],
+		"name": "setArbitrationPrice",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
