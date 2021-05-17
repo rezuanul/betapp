@@ -122,7 +122,6 @@ export default function resolveFilterVariablesForQuery(filters) {
         };
 
       } else {
-        console.log("TÄÄLLÄ");
         return {
           country: 0,
           category: 0,
