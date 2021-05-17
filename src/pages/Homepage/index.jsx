@@ -93,16 +93,16 @@ export default function Homepage({ account, filters, setFilters }) {
           <Link to="/create-bet" className="btn btn-danger btn-block">
             Create a Bet
           </Link>
-          <div className="col-lg-3 offset-lg-0 col-sm-1">
+          <div className="col-lg-3 offset-lg-0 col-sm-1 mt-3">
             <Button variant="warning" onClick={resetFilters}>
               Show all events
              </Button>
           </div>
         </div>
-        <div className="row">
+        <div className="row mt-3">
           <div className="col-lg-14">
             <div className="row">
-              <div className="col-lg-3 col-sm-3">
+              <div className="col">
                 <Form>
                   <Form.Group controlId="SelectCountry">
                     <Form.Label>Country</Form.Label>
@@ -117,7 +117,7 @@ export default function Homepage({ account, filters, setFilters }) {
                   </Form.Group>
                 </Form>
               </div>
-              <div className="col-lg-3 offset-lg-0 col-sm-3">
+              <div className="col">
                 <Form>
                   <Form.Group controlId="SelectCategory">
                     <Form.Label>Category</Form.Label>
@@ -132,7 +132,7 @@ export default function Homepage({ account, filters, setFilters }) {
                   </Form.Group>
                 </Form>
               </div>
-              <div className="col-lg-1 offset-lg-0 col-sm-1">
+              <div className="col">
                 <Form>
                   <Form.Group controlId="SelectLeague">
                     <Form.Label>League</Form.Label>
