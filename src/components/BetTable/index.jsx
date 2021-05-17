@@ -144,7 +144,7 @@ export default function BetTable({
                                             && bet.creator !== account) &&
                                             <button id="backBet" onClick={() => backBetHandler(bet.id, bet.backerStake)} className="btn btn-primary btn-block">
                                                 Back Bet
-                                    </button>}
+                                        </button>}
                                         {(bet.state === STATE_VOTING
                                             && (bet.creator === account || bet.backer === account)
                                             && !((bet.creator === account && bet.creatorHasVoted) || (bet.backer === account && bet.backerHasVoted))) ?
@@ -159,25 +159,28 @@ export default function BetTable({
                                                     Undecidable
                                                 </button>
                                             </div>
-                                            ) : (bet.state === STATE_VOTING && <p>Voted</p>)}
+                                            ) : ((bet.state === STATE_VOTING && (bet.creator === account || bet.backer === account)) && <p>Voted</p>)}
 
                                         {(bet.state === STATE_DISAGREEMENT && (bet.creator === account || bet.backer === account)) &&
                                             <button id="dispute" onClick={() => disputeBetHandler(bet.id)} className="btn btn-danger btn-block">
                                                 Dispute
                                             </button>}
-                                        {((bet.outcome === NO_OUTCOME) && ((bet.state === STATE_VOTING && bet.votingDeadline < new Date().getTime() / 1000)
-                                            || bet.state === STATE_AGREEMENT
-                                            || (bet.state === STATE_OPEN && bet.stakingDeadline < new Date().getTime() / 1000)
-                                        )
-                                            && (bet.creator === account || bet.backer === account)) &&
+                                        {((bet.outcome === NO_OUTCOME)
+                                            && ((bet.state === STATE_VOTING && bet.votingDeadline < new Date().getTime() / 1000)
+                                                || bet.state === STATE_AGREEMENT
+                                                || (bet.state === STATE_OPEN && bet.stakingDeadline < new Date().getTime() / 1000)
+                                            )
+                                            && ((bet.creator === account && bet.creatorStake != 0) || (bet.backer === account && bet.backerStake != 0))) &&
                                             <button id="refund" onClick={() => refundBetHandler(bet.id)} className="btn btn-warning btn-block">
                                                 Refund
                                             </button>
                                         }
-                                        {(bet.state === STATE_AGREEMENT && (bet.creator === account || bet.backer === account)) &&
+                                        {(bet.state === STATE_AGREEMENT
+                                            && ((bet.creator === account && bet.outcome == CREATOR_WINS)
+                                                || (bet.backer === account && bet.outcome == BACKER_WINS))) &&
                                             <button id="claimWinnings" onClick={() => claimWinningsHandler(bet.id)} className="btn btn-success btn-block">
                                                 ClaimWinnings
-                                    </button>}
+                                            </button>}
                                         {bet.state === STATE_REFUNDED && <p>Refunded</p>}
                                         {bet.state === STATE_RESOLVED && <p>Resolved</p>}
                                         {bet.state === STATE_DISPUTED && <a href={"https://court.kleros.io/cases/" + bet.disputeID}>In arbitration</a>}

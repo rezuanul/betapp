@@ -47,7 +47,8 @@ export default function Event({ betContract, arbitratorContract, account, filter
 
   const handleRedirect = () => {
     setShow(false);
-    history.push('/event');
+    refetch(resolveFilterVariablesForQuery(filters));
+    history.push('/');
   };
 
 

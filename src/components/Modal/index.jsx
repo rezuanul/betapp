@@ -21,7 +21,7 @@ export default function TransactionModal({ show, handleCloseModal, handleRedirec
                     Close and try again
           </Button>}
                 {!transacting && <Button variant="danger" onClick={handleRedirect}>
-                    Go to Home Page
+                    Go to the Events Page
           </Button>}
             </Modal.Footer>
         </Modal>

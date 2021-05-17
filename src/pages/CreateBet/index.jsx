@@ -47,7 +47,7 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
 
   const handleRedirect = () => {
     setShow(false);
-    history.push('/event');
+    history.push('/');
   };
 
   const initialValues = {
@@ -276,8 +276,8 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
                   error={formikForm.errors.stake}
                   touched={formikForm.touched.stake}
                 />
+                <Label htmlFor="stake" className="ml-3">In ETH: {formikForm.values.stake / 1000000000000000000}</Label>
               </div>
-
 
               <div className="form-group">
                 <Label htmlFor="odd">Your Odd</Label>
@@ -290,7 +290,12 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
                   error={formikForm.errors.odd}
                   touched={formikForm.touched.odd}
                 />
-                <Label htmlFor="odd">Backer Odd: {formikForm.values.odd > 1000000 && 1 / (1 - (1000000 / formikForm.values.odd))}</Label>
+                <Label htmlFor="yourProb" className="mr-3">Your Probability: {formikForm.values.odd > 1000000 && (1000000 / formikForm.values.odd).toFixed(6)}</Label>
+                <Label htmlFor="backerProb" className="ml-2"> Backer Probability: {formikForm.values.odd > 1000000 && (1 - (1000000 / formikForm.values.odd).toFixed(6))}</Label>
+                <Label
+                  htmlFor="backerOdd"
+                  className="ml-3">Backer Stake in ETH: {formikForm.values.odd > 1000000 &&
+                    (((formikForm.values.stake * (formikForm.values.odd / 1000000)) - formikForm.values.stake)/1000000000000000000).toPrecision(5)}</Label>
               </div>
 
               <div className="form-group">
