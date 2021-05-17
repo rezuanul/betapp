@@ -1,15 +1,13 @@
 export default function index() {
   return (
-    <div className="mt-5 py-5 bg-primary footer">
+    <div className="mt-7 py-5 bg-primary footer">
       <div className="container">
         <div className="row">
           <div className="col-md-5">
-            <h4>About BetApp</h4>
+            <h4>About Gambleboard</h4>
 
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.{' '}
+             GambleBoard is a decentralized application running on the Ethereum blockchain. It makes it possible for users to bet against each other on almost any event!
             </p>
           </div>
 
