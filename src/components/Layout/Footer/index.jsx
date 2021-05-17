@@ -4,10 +4,10 @@ export default function index() {
       <div className="container">
         <div className="row">
           <div className="col-md-5">
-            <h4>About GambleBoard</h4>
+            <h4>About Gambleboard</h4>
 
             <p>
-              GambleBoard is a decentralized application running on the Ethereum blockchain. It makes it possible for users to bet against each other on almost any event!
+             GambleBoard is a decentralized application running on the Ethereum blockchain. It makes it possible for users to bet against each other on almost any event!
             </p>
           </div>
 

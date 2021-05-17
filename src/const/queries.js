@@ -113,3 +113,28 @@ export const EVENTS_QUERY = gql`
     }  
 }
 `;
+
+export const GET_BETS = gql`
+    query getBetsFromEvent($id: ID!) {
+            bets(where: { event: $id }) {
+              id
+              description
+              creatorBetDescription
+              creator
+              creatorStake
+              stakingDeadline
+              backer
+              backerStake
+              timeCreated
+              outcome
+              state
+              league
+              category
+              country
+              creatorHasVoted
+              backerHasVoted
+              creatorProvidedEvidence
+              backerProvidedEvidence
+              disputeID
+            }
+    }`;

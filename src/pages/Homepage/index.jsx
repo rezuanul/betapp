@@ -4,7 +4,6 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import PageCover from '../../components/Layout/PageCover';
 
-
 import { countryOptionsArray, categoryOptionsArray } from '../../const/filterMappings';
 
 import resolveFilterVariablesForQuery from '../../interaction/filterBooleanResolver';
@@ -74,7 +73,7 @@ export default function Homepage({ account, filters, setFilters }) {
   }
 
   const showBetsHandler = async (eventID) => {
-    await setFilters(filters => {
+      await setFilters(filters => {
       filters.eventID = eventID;
       return filters;
     });

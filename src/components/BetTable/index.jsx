@@ -3,7 +3,6 @@ import Modal from '../../components/Modal';
 import { categoryOptions, countryOptions } from '../../const/filterMappings';
 
 import { useHistory } from 'react-router-dom';
-import { isNullableType } from 'graphql';
 
 const NO_OUTCOME = 0;
 const CREATOR_WINS = 1;
@@ -253,6 +252,7 @@ export default function BetTable({ betContract, arbitratorContract, account, bet
                                             <button id="claimWinnings" onClick={() => claimWinningsHandler(bet.id)} className="btn btn-success btn-block">
                                                 ClaimWinnings
                                     </button>}
+                                    {bet.state === STATE_REFUNDED && <p>Refunded</p>}
                                     {bet.state === STATE_RESOLVED && <p>Resolved</p>}
                                     {bet.state === STATE_DISPUTED && <a href={"https://court.kleros.io/cases/" + bet.disputeID}>In arbitration</a>}
                                     </div>

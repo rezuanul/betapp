@@ -35,7 +35,7 @@ function App() {
     Arbitrator,
     ARBITRATOR_CONTRACT_ADDRESS
   )
-  
+
   // Utilities for submitting evidence
   const archon = new Archon('http://127.0.0.1:8545');
   archon.setIpfsGateway('http://127.0.0.1:8080');
@@ -53,8 +53,8 @@ function App() {
   const [filters, setFilters] = useState({
     country: '',
     category: '',
-    league: undefined,
-    eventID: null // The undefined value, We can't give the parameter as undefined to the query, and we want to also query the empty string.
+    league: undefined, // The undefined value, We can't give the parameter as undefined to the query, and we want to also query the empty string.
+    eventID: null 
   })
 
   /// called on every render. "Listens" to account changes.

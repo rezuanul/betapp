@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PageCover from '../../components/Layout/PageCover';
+import Modal from '../../components/Modal';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -6,9 +8,6 @@ import * as yup from 'yup';
 import Input from '../../components/form/Input';
 import Label from '../../components/form/Label';
 import Select from '../../components/form/Select';
-import PageCover from '../../components/Layout/PageCover';
-import Modal from '../../components/Modal';
-
 
 // for filters
 import { categoryOptionsArray, countryOptionsArray } from '../../const/filterMappings';
@@ -141,8 +140,8 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
 
   return (
     <>
-      <PageCover description={"Create a new Bet"} />
       <div className="mt-5 container">
+        <PageCover description={"Create a new Bet"} />
 
         <div className="row justify-content-center">
           <div className="col-lg-8">
@@ -211,7 +210,6 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
                       filters.country = e.target.value;
                       return filters;
                     });
-                    console.log(filters)
                     refetch({
                       variables: {
                         category: parseInt(filters.category),
