@@ -16,18 +16,16 @@ export default function index() {
 
             <img
               className="img-fluid"
-              src="http://via.placeholder.com/600x100?text=Powered+By+Image"
+              src="https://block-builders.nl/wp-content/uploads/2021/01/Graph-Protocol-678x381.png"
               alt="Powered By"
             />
           </div>
           <div className="col-md-3">
-            <h4>Know More</h4>
-            <ul className="pl-3">
-              <li>About Us</li>
-              <li>Contact Us</li>
-              <li>FAQs</li>
-              <li>Terms & Conditions</li>
-            </ul>
+            <img
+              className="img-fluid"
+              src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Kleros-logo.png"
+              alt="Powered By"
+            />
           </div>
         </div>
 
