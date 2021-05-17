@@ -224,7 +224,6 @@ export const countryOptions = [
     { value: 200, label: 'Middle East' },
     { value: 201, label: 'Asia' },
     { value: 202, label: 'Africa' },
-    { value: 203, label: 'Australia' },
 ];
 
 export const countryOptionsArray = [];

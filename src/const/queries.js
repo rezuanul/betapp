@@ -15,7 +15,7 @@ export const EVENTS_QUERY = gql`
                   $countryCategoryLeagueB: Boolean!
                    ) {
                     
-    events @include(if: $noParams) {
+    events(orderBy: startTime) @include(if: $noParams) {
       id
       description
       startTime
@@ -27,7 +27,7 @@ export const EVENTS_QUERY = gql`
       }
     }
                     
-    events(where: {country: $country}) @include(if: $countryB) {
+    events(where: {country: $country}, orderBy: startTime) @include(if: $countryB) {
       id
       description
       startTime
@@ -39,7 +39,7 @@ export const EVENTS_QUERY = gql`
       }
     }
     
-    events(where: {category: $category}) @include(if: $categoryB) {
+    events(where: {category: $category}, orderBy: startTime) @include(if: $categoryB) {
       id
       description
       startTime
@@ -52,7 +52,7 @@ export const EVENTS_QUERY = gql`
     }
                     
                         
-    events(where: {league_contains: $league}) @include(if: $leagueB) {
+    events(where: {league_contains: $league}, orderBy: startTime) @include(if: $leagueB) {
       id
       description
       startTime
@@ -64,7 +64,7 @@ export const EVENTS_QUERY = gql`
       }
     }
                     
-    events(where: { country: $country, category: $category}) @include(if: $countryCategoryB) {
+    events(where: { country: $country, category: $category}, orderBy: startTime) @include(if: $countryCategoryB) {
       id
       description
       startTime
@@ -76,7 +76,7 @@ export const EVENTS_QUERY = gql`
       }
     }  
   
-    events(where: { country: $country, league_contains: $league}) @include(if: $countryLeagueB) {
+    events(where: { country: $country, league_contains: $league}, orderBy: startTime) @include(if: $countryLeagueB) {
       id
       description
       startTime
@@ -88,7 +88,7 @@ export const EVENTS_QUERY = gql`
       }
     }  
                     
-    events(where: { category: $category, league_contains: $league}) @include(if: $categoryLeagueB) {
+    events(where: { category: $category, league_contains: $league}, orderBy: startTime) @include(if: $categoryLeagueB) {
       id
       description
       startTime
@@ -100,7 +100,7 @@ export const EVENTS_QUERY = gql`
       }
     }  
                     
-    events(where: { country: $country, category: $category, league_contains: $league}) @include(if: $countryCategoryLeagueB) {
+    events(where: { country: $country, category: $category, league_contains: $league}, orderBy: startTime) @include(if: $countryCategoryLeagueB) {
       id
       description
       startTime
@@ -118,6 +118,8 @@ export const GET_BETS = gql`
     query getBetsFromEvent($country: Int,
                            $category: Int,
                            $league: String,
+                           $state: Int,
+                           $account: String!,
                            $noParams: Boolean!,
                            $countryB: Boolean!,
                            $categoryB: Boolean!,
@@ -129,7 +131,7 @@ export const GET_BETS = gql`
                            $eventID: ID!,
                            $eventIDGiven: Boolean!) {
 
-      bets(where: { event: $eventID }) @include(if: $eventIDGiven) {
+      bets(where: { event: $eventID, creatorBacker_contains: $account }, orderBy: stakingDeadline) @include(if: $eventIDGiven) {
         id
         description
         creatorBetDescription
@@ -151,7 +153,7 @@ export const GET_BETS = gql`
         disputeID
       }
 
-      bets @include(if: $noParams) {
+      bets(where: {state: $state, creatorBacker_contains: $account}, orderBy: stakingDeadline) @include(if: $noParams) {
         id
         description
         creatorBetDescription
@@ -174,7 +176,7 @@ export const GET_BETS = gql`
       }
 
                           
-    bets(where: {country: $country}) @include(if: $countryB) {
+    bets(where: {country: $country, state: $state, creatorBacker_contains: $account}, orderBy: stakingDeadline) @include(if: $countryB) {
       id
       description
       creatorBetDescription
@@ -196,7 +198,7 @@ export const GET_BETS = gql`
       disputeID
     }
     
-    bets(where: {category: $category}) @include(if: $categoryB) {
+    bets(where: {category: $category, state: $state, creatorBacker_contains: $account}, orderBy: stakingDeadline) @include(if: $categoryB) {
       id
       description
       creatorBetDescription
@@ -219,7 +221,7 @@ export const GET_BETS = gql`
     }
                     
                         
-    bets(where: {league_contains: $league}) @include(if: $leagueB) {
+    bets(where: {league_contains: $league, state: $state, creatorBacker_contains: $account}, orderBy: stakingDeadline) @include(if: $leagueB) {
       id
       description
       creatorBetDescription
@@ -241,7 +243,7 @@ export const GET_BETS = gql`
       disputeID
     }
                     
-    bets(where: { country: $country, category: $category}) @include(if: $countryCategoryB) {
+    bets(where: { country: $country, category: $category, state: $state, creatorBacker_contains: $account}, orderBy: stakingDeadline) @include(if: $countryCategoryB) {
       id
       description
       creatorBetDescription
@@ -263,7 +265,7 @@ export const GET_BETS = gql`
       disputeID
     }  
   
-    bets(where: { country: $country, league_contains: $league}) @include(if: $countryLeagueB) {
+    bets(where: { country: $country, league_contains: $league, state: $state, creatorBacker_contains: $account}, orderBy: stakingDeadline) @include(if: $countryLeagueB) {
       id
       description
       creatorBetDescription
@@ -285,7 +287,7 @@ export const GET_BETS = gql`
       disputeID
     }  
                     
-    bets(where: { category: $category, league_contains: $league}) @include(if: $categoryLeagueB) {
+    bets(where: { category: $category, league_contains: $league, state: $state, creatorBacker_contains: $account}, orderBy: stakingDeadline) @include(if: $categoryLeagueB) {
       id
       description
       creatorBetDescription
@@ -307,7 +309,7 @@ export const GET_BETS = gql`
       disputeID
     }  
                     
-    bets(where: { country: $country, category: $category, league_contains: $league}) @include(if: $countryCategoryLeagueB) {
+    bets(where: { country: $country, category: $category, league_contains: $league, state: $state, creatorBacker_contains: $account}, orderBy: stakingDeadline) @include(if: $countryCategoryLeagueB) {
       id
       description
       creatorBetDescription

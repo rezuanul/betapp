@@ -9,6 +9,7 @@ import { countryOptionsArray, categoryOptionsArray } from '../../const/filterMap
 import resolveFilterVariablesForQuery from '../../interaction/filterBooleanResolver';
 
 import EventTable from '../../components/EventTable';
+import {STATE_OPEN} from '../../const/contractEnums';
 import { useQuery, useLazyQuery } from '@apollo/client';
 
 import { EVENTS_QUERY } from '../../const/queries'
@@ -74,8 +75,12 @@ export default function Homepage({ account, filters, setFilters }) {
   }
 
   const showBetsHandler = async (eventID) => {
-      await setFilters(filters => {
+    await setFilters(filters => {
       filters.eventID = eventID;
+      filters.country = '';
+      filters.category = '';
+      filters.league = undefined;
+      filters.state = STATE_OPEN;
       return filters;
     });
   }
@@ -91,7 +96,7 @@ export default function Homepage({ account, filters, setFilters }) {
           <div className="col-lg-3 offset-lg-0 col-sm-1">
             <Button variant="warning" onClick={resetFilters}>
               Show all events
-                   </Button>
+             </Button>
           </div>
         </div>
         <div className="row">
