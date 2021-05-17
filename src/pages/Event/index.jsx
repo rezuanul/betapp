@@ -2,12 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
-
 import BetTable from '../../components/BetTable';
 import PageCover from '../../components/Layout/PageCover';
-import { useQuery, gql } from '@apollo/client';
 
+import { useQuery, gql } from '@apollo/client';
 import { countryOptionsArray, categoryOptionsArray } from '../../const/filterMappings';
 import { GET_BETS } from '../../const/queries';
 
