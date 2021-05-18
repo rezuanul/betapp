@@ -75,83 +75,103 @@ export default function Homepage({ account, filters, setFilters, loading, error,
     <>
       <PageCover description={"Search upcoming events"} />
       <div className="homepage">
-        <div className="mt-5 container">
-          <div className="row">
-            <Link to="/create-bet" className="btn btn-danger btn-block">
-              Create a Bet
-          </Link>
-            <div className="col-lg-3 offset-lg-0 col-sm-1 mt-3 mr-3">
-              <Button variant="warning" onClick={resetFilters}>
-                Show all events
-             </Button>
-            </div>
-            <div className="col-lg-3 offset-lg-0 col-sm-1 mt-3 ml-3">
-              <Button variant="outline-primary" onClick={reloadHandler}>
-                Reload with current filters
-             </Button>
-            </div>
-          </div>
-          <div className="row mt-3">
-            <div className="col">
-              <div className="row">
-                <div className="col">
-                  <Form>
-                    <Form.Group controlId="SelectCountry">
-                      <Form.Label>Country</Form.Label>
-                      <Form.Control
-                        value={((filters.country) ? filters.country : 0)}
-                        onChange={countryFilterHandler}
-                        as="select"
-                        custom
-                      >
-                        {countryOptionsArray}
-                      </Form.Control>
-                    </Form.Group>
-                  </Form>
-                </div>
-                <div className="col">
-                  <Form>
-                    <Form.Group controlId="SelectCategory">
-                      <Form.Label>Category</Form.Label>
-                      <Form.Control
-                        value={((filters.category) ? filters.category : 0)}
-                        onChange={categoryFilterHandler}
-                        as="select"
-                        custom
-                      >
-                        {categoryOptionsArray}
-                      </Form.Control>
-                    </Form.Group>
-                  </Form>
-                </div>
-                <div className="col">
-                  <Form>
-                    <Form.Group controlId="SelectLeague">
-                      <Form.Label>League</Form.Label>
-                      <Form.Control
-                        className="w-100"
-                        value={filters.league}
-                        onChange={leagueFilterHandler}
-                        as="input"
-                        custom
-                      >
+        <div className="mt-5 row">
 
-                      </Form.Control>
-                    </Form.Group>
-                  </Form>
+          <div className="col-sm-2">
+              <div className="container">
+
+                <div className="btn btn-block mt-3">
+                    <Button href="/create-bet" variant="danger" block>
+                      Create a Bet
+                    </Button>
                 </div>
+
+                <div className="btn btn-block mt-3">
+                  <Button variant="warning" onClick={resetFilters} block>
+                    Show all events
+                 </Button>
+                </div>
+
+                <div className="btn btn-block mt-3">
+                  <Button variant="outline-primary" onClick={reloadHandler}block>
+                    Reload with current filters
+                 </Button>
+                </div>
+
               </div>
-              {error && <div><p>Error loading data</p></div>}
-              <div className="row">
-                <EventTable
-                  betData={data && { data }}
-                  error={error}
-                  loading={loading}
-                  showBetsHandler={showBetsHandler}
-                />
+          </div>
+
+          <div className="col mt-3">
+            <div className="row">
+              <div className="container">
+
+                 <div className="row">
+
+                    <div className="col">
+                      <Form>
+                        <Form.Group controlId="SelectCountry">
+                          <Form.Label>Country</Form.Label>
+                          <Form.Control
+                            value={((filters.country) ? filters.country : 0)}
+                            onChange={countryFilterHandler}
+                            as="select"
+                            custom
+                          >
+                            {countryOptionsArray}
+                          </Form.Control>
+                        </Form.Group>
+                      </Form>
+                    </div>
+
+                    <div className="col">
+                      <Form>
+                        <Form.Group controlId="SelectCategory">
+                          <Form.Label>Category</Form.Label>
+                          <Form.Control
+                            value={((filters.category) ? filters.category : 0)}
+                            onChange={categoryFilterHandler}
+                            as="select"
+                            custom
+                          >
+                            {categoryOptionsArray}
+                          </Form.Control>
+                        </Form.Group>
+                      </Form>
+                    </div>
+
+                    <div className="col">
+                      <Form>
+                        <Form.Group controlId="SelectLeague">
+                          <Form.Label>League</Form.Label>
+                          <Form.Control
+                            className="w-100"
+                            value={filters.league}
+                            onChange={leagueFilterHandler}
+                            as="input"
+                            custom
+                          >
+
+                          </Form.Control>
+                        </Form.Group>
+                      </Form>
+                    </div>
+
+                 </div>
+
+                              {error && <div><p>Error loading data</p></div>}
+                  
+                    <EventTable
+                      betData={data && { data }}
+                      error={error}
+                      loading={loading}
+                      showBetsHandler={showBetsHandler}
+                              />
+
               </div>
+
             </div>
           </div>
+
         </div>
       </div>
     </>

@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\components",
+    "\\src\\components\\BetTable",
+    "\\src\\pages",
+    "\\src\\pages\\Event",
+    "\\src\\pages\\Homepage"
+  ],
+  "SelectedNode": "\\src\\pages\\Homepage\\index.jsx",
+  "PreviewInSolutionExplorer": false
+}
