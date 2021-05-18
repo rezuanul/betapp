@@ -191,96 +191,98 @@ export default function Event({ betContract, arbitratorContract, account, filter
               Reset filters
           </Button>
           </div>
-          <div className="col-lg-3 offset-lg-0 col-sm-1 mt-3 mr-3">
+          <div className="col-lg-3 offset-lg-0 col-sm-1 mt-3 ml-3 mr-3">
             <Button variant="outline-primary" onClick={reloadHandler}>
               Reload with current filters
           </Button>
           </div>
           <div className="col-lg-3 offset-lg-0 col-sm-1 mt-3 ml-3">
-            <Button variant="info" onClick={yourBetsHandler}>
+            <Button variant="outline-success" onClick={yourBetsHandler}>
               Show your bets
           </Button>
           </div>
         </div>
-        <div className="row">
-          <div className="col">
-            <Form>
-              <Form.Group controlId="SelectCountry">
-                <Form.Label>Country</Form.Label>
-                <Form.Control
-                  value={((filters.country) ? filters.country : 0)}
-                  onChange={countryFilterHandler}
-                  as="select"
-                  custom
-                >
-                  {countryOptionsArray}
-                </Form.Control>
-              </Form.Group>
-            </Form>
-          </div>
-          <div className="col">
-            <Form>
-              <Form.Group controlId="SelectCategory">
-                <Form.Label>Category</Form.Label>
-                <Form.Control
-                  value={((filters.category) ? filters.category : 0)}
-                  onChange={categoryFilterHandler}
-                  as="select"
-                  custom
-                >
-                  {categoryOptionsArray}
-                </Form.Control>
-              </Form.Group>
-            </Form>
-          </div>
-          <div className="col">
-            <Form>
-              <Form.Group controlId="SelectCategory">
-                <Form.Label>State</Form.Label>
-                <Form.Control
-                  value={filters.state}
-                  onChange={stateFilterHandler}
-                  as="select"
-                  custom
-                >
-                  {StateToText.map((value, key) => (
-                    <option key={value} value={key}>{value}</option>
-                  ))}
-                </Form.Control>
-              </Form.Group>
-            </Form>
-          </div>
+        <div className="row mt-3">
+          <div className="row">
+            <div className="col">
+              <Form>
+                <Form.Group controlId="SelectCountry">
+                  <Form.Label>Country</Form.Label>
+                  <Form.Control
+                    value={((filters.country) ? filters.country : 0)}
+                    onChange={countryFilterHandler}
+                    as="select"
+                    custom
+                  >
+                    {countryOptionsArray}
+                  </Form.Control>
+                </Form.Group>
+              </Form>
+            </div>
+            <div className="col">
+              <Form>
+                <Form.Group controlId="SelectCategory">
+                  <Form.Label>Category</Form.Label>
+                  <Form.Control
+                    value={((filters.category) ? filters.category : 0)}
+                    onChange={categoryFilterHandler}
+                    as="select"
+                    custom
+                  >
+                    {categoryOptionsArray}
+                  </Form.Control>
+                </Form.Group>
+              </Form>
+            </div>
+            <div className="col">
+              <Form>
+                <Form.Group controlId="SelectCategory">
+                  <Form.Label>State</Form.Label>
+                  <Form.Control
+                    value={filters.state}
+                    onChange={stateFilterHandler}
+                    as="select"
+                    custom
+                  >
+                    {StateToText.map((value, key) => (
+                      <option key={value} value={key}>{value}</option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
+              </Form>
+            </div>
 
-          <div className="col">
-            <Form>
-              <Form.Group controlId="SelectLeague">
-                <Form.Label>League</Form.Label>
-                <Form.Control
-                  className="w-100"
-                  value={filters.league}
-                  onChange={leagueFilterHandler}
-                  as="input"
-                  custom
-                >
+            <div className="col">
+              <Form>
+                <Form.Group controlId="SelectLeague">
+                  <Form.Label>League</Form.Label>
+                  <Form.Control
+                    className="w-100"
+                    value={filters.league}
+                    onChange={leagueFilterHandler}
+                    as="input"
+                    custom
+                  >
 
-                </Form.Control>
-              </Form.Group>
-            </Form>
+                  </Form.Control>
+                </Form.Group>
+              </Form>
+            </div>
+
           </div>
-
-        </div>
-        <div className="row">
-          <BetTable
-            account={account}
-            betData={data && { data }}
-            error={error}
-            loading={loading}
-            backBetHandler={backBetHandler}
-            voteHandler={voteHandler}
-            disputeBetHandler={disputeBetHandler}
-            refundBetHandler={refundBetHandler}
-            claimWinningsHandler={claimWinningsHandler}
-          />
+          <div className="row">
+            <BetTable
+              account={account}
+              betData={data && { data }}
+              error={error}
+              loading={loading}
+              backBetHandler={backBetHandler}
+              voteHandler={voteHandler}
+              disputeBetHandler={disputeBetHandler}
+              refundBetHandler={refundBetHandler}
+              claimWinningsHandler={claimWinningsHandler}
+            />
+          </div>
         </div>
       </div>
       <Modal show={show}
