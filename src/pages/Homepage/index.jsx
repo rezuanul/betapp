@@ -64,6 +64,10 @@ export default function Homepage({ account, filters, setFilters, loading, error,
     });
   }
 
+  const reloadHandler = async () => {
+    refetch(resolveFilterVariablesForQuery(filters));
+  }
+
   return (
     <>
       <PageCover description={"Search upcoming events"} />
@@ -73,9 +77,14 @@ export default function Homepage({ account, filters, setFilters, loading, error,
             <Link to="/create-bet" className="btn btn-danger btn-block">
               Create a Bet
           </Link>
-            <div className="col-lg-3 offset-lg-0 col-sm-1 mt-3">
+            <div className="col-lg-3 offset-lg-0 col-sm-1 mt-3 mr-3">
               <Button variant="warning" onClick={resetFilters}>
                 Show all events
+             </Button>
+            </div>
+            <div className="col-lg-3 offset-lg-0 col-sm-1 mt-3 ml-3">
+              <Button variant="outline-primary" onClick={reloadHandler}>
+                Reload with current filters
              </Button>
             </div>
           </div>

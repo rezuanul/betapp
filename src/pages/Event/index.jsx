@@ -174,6 +174,10 @@ export default function Event({ betContract, arbitratorContract, account, filter
       .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
   }
 
+  const reloadHandler = async () => {
+    refetch(resolveFilterVariablesForQuery(filters));
+  }
+
   return (
     <div>
       <PageCover description={"Search and Back bets"} />
@@ -182,14 +186,21 @@ export default function Event({ betContract, arbitratorContract, account, filter
           <Link to="/create-bet" className="btn btn-danger btn-block">
             Create a Bet
           </Link>
-        </div>
-        <div className="col-lg-3 offset-lg-0 col-sm-1">
-          <Button variant="warning" onClick={resetFilters}>
-            Reset filters
+          <div className="col-lg-3 offset-lg-0 col-sm-1 mt-3 mr-3">
+            <Button variant="warning" onClick={resetFilters}>
+              Reset filters
           </Button>
-          <Button variant="info" onClick={yourBetsHandler}>
-            Show your bets
+          </div>
+          <div className="col-lg-3 offset-lg-0 col-sm-1 mt-3 mr-3">
+            <Button variant="outline-primary" onClick={reloadHandler}>
+              Reload with current filters
           </Button>
+          </div>
+          <div className="col-lg-3 offset-lg-0 col-sm-1 mt-3 ml-3">
+            <Button variant="info" onClick={yourBetsHandler}>
+              Show your bets
+          </Button>
+          </div>
         </div>
         <div className="row">
           <div className="col">
