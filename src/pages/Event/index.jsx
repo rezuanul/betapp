@@ -124,7 +124,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
     if (filters.account !== account) {
       acc = account;
       buttonText = 'Show all bets'
-    } 
+    }
     await setFilters(filters => {
       filters.account = acc;
       return filters;
@@ -201,6 +201,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
               Show your bets
           </Button>
           </div>
+
         </div>
         <div className="row mt-3">
           <div className="row">
@@ -270,7 +271,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
             </div>
 
           </div>
-          <div className="row">
+          <div className="row" >
             <BetTable
               account={account}
               betData={data && { data }}

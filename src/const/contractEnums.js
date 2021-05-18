@@ -13,3 +13,5 @@ export const STATE_REFUNDED = 6;
 export const StateValueArray = [STATE_OPEN, STATE_VOTING, STATE_AGREEMENT, STATE_DISAGREEMENT, STATE_DISPUTED , STATE_RESOLVED , STATE_REFUNDED];
 
 export const StateToText = ["Open", "Voting", "Agreement", "Disagreement", "Disputed", "Resolved", "Refunded"];
+
+export const OutcomeToText = ["Undecidable", "Creator Wins", "Backer Wins"];

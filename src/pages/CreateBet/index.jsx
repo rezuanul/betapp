@@ -185,19 +185,6 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
               </div>
 
               <div className="form-group">
-                <Label htmlFor="creatorBet">Your bet</Label>
-                <Input
-                  type="text"
-                  name="creatorBet"
-                  id="creatorBet"
-                  onChange={formikForm.handleChange}
-                  value={formikForm.values.creatorBet}
-                  error={formikForm.errors.creatorBet}
-                  touched={formikForm.touched.creatorBet}
-                />
-              </div>
-
-              <div className="form-group">
                 <Label htmlFor="country">Country</Label>
                 <Select
                   type='select'
@@ -266,6 +253,19 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
               </div>
 
               <div className="form-group">
+                <Label htmlFor="creatorBet">I bet, that the following will happen:</Label>
+                <Input
+                  type="text"
+                  name="creatorBet"
+                  id="creatorBet"
+                  onChange={formikForm.handleChange}
+                  value={formikForm.values.creatorBet}
+                  error={formikForm.errors.creatorBet}
+                  touched={formikForm.touched.creatorBet}
+                />
+              </div>
+
+              <div className="form-group">
                 <Label htmlFor="stake">Stake</Label>
                 <Input
                   type="number"
@@ -295,7 +295,7 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
                 <Label
                   htmlFor="backerOdd"
                   className="ml-3">Backer Stake in ETH: {formikForm.values.odd > 1000000 &&
-                    (((formikForm.values.stake * (formikForm.values.odd / 1000000)) - formikForm.values.stake)/1000000000000000000).toPrecision(5)}</Label>
+                    (((formikForm.values.stake * (formikForm.values.odd / 1000000)) - formikForm.values.stake) / 1000000000000000000).toPrecision(5)}</Label>
               </div>
 
               <div className="form-group">

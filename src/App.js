@@ -84,6 +84,12 @@ function App() {
       alert("Sign in to Metamask to use the app!")
     } else if (accounts[0] !== account) {
       setAccount(accounts[0])
+      if (filters.account !== '') {
+        setFilters(filters => {
+          filters.account = accounts[0];
+          return filters;
+        });
+      }
     }
   }
 

@@ -10,8 +10,11 @@ import {
     STATE_DISAGREEMENT,
     STATE_DISPUTED,
     STATE_RESOLVED,
-    STATE_REFUNDED
+    STATE_REFUNDED,
+    OutcomeToText
 } from '../../const/contractEnums';
+
+const ETH = 1000000000000000000;
 
 export default function BetTable({
     betData,
@@ -29,21 +32,40 @@ export default function BetTable({
     return (
         <>
             <div className="table-responsive">
-                <table className="table table-striped table-bordered" width={"100%"}>
+                <table className="table table-striped table-bordered" style={{ textAlign: "center" }}>
                     <thead className="bg-primary text-white font-bold">
                         <tr>
-                            <th>Event</th>
-                            <th>Creator/Backer</th>
+                            <th style={{ textAlign: "left" }}>Event</th>
+                            <th>Start time</th>
                             <th>Creator Bet</th>
-                            {/* <th>Created On</th> */}
-                            {filters.state == STATE_VOTING && <th>Time left to vote</th>}
+                            <th>
+                                <div> Creator</div>
+                                <div>---------</div>
+                                <div>Backer</div>
+                            </th>
                             {/*<th>Backer odd</th>*/}
-                            <th>Backer stake</th>
-                            <th>Country</th>
-                            <th>Category</th>
-                            <th>League</th>
-                            <th>Metaevidence</th>
-                            <th>Dispute ID</th>
+                            <th>
+                                <div>Stake:</div>
+                                <div>Creator</div>
+                                <div>Backer</div>
+                                <div>---------</div>
+                                <div>Total (ETH)</div>
+                            </th>
+                            <th>
+                                <div>Creator</div>
+                                <div>Odd</div>
+                                <div>Prob</div>
+                                <div>-------</div>
+                                <div>Backer</div>
+                                <div>Odd</div>
+                                <div>Prob</div>
+                            </th>
+                            <th><div>Country</div> <div>Category</div>  <div>League</div></th>
+                            {/* <th>Metaevidence</th>
+                            <th>Dispute ID</th> */}
+                            {filters.state == STATE_VOTING && <th>Time left to vote</th>}
+                            {(filters.state == STATE_AGREEMENT || filters.state == STATE_RESOLVED) && <th>Outcome</th>}
+                            {filters.state == STATE_DISAGREEMENT && <th>Disagreement</th>}
                             <th></th>
                         </tr>
                     </thead>
@@ -51,7 +73,7 @@ export default function BetTable({
                         {betData && betData.data.bets.map((bet) => (
                             <tr key={bet.id}>
 
-                                <td>
+                                <td style={{ textAlign: "left" }}>
                                     <div className="d-flex">
                                         <div className="content">
                                             <span className="name d-block">{bet.description}</span>
@@ -61,17 +83,7 @@ export default function BetTable({
 
                                 <td>
                                     <div>
-                                        <span className="name d-block">
-                                            <a href={'https://etherscan.io/address/' + bet.creator}>
-                                                {bet.creator.slice(0, 5) + '...' + bet.creator.slice(-3, bet.creator.length)}
-                                                {bet.creator === account && '(You)'}
-                                            </a> / {bet.backer === "0x0000000000000000000000000000000000000000" && "You can be one!"}
-                                                   {bet.backer !== "0x0000000000000000000000000000000000000000" &&
-                                                     <a href={'https://etherscan.io/address/' + bet.backer}>
-                                                        {bet.backer.slice(0, 5) + '...' + bet.backer.slice(-3, bet.backer.length)}
-                                                        {bet.backer === account && '(You)'}
-                                                     </a>}
-                                        </span>
+                                        <span className="d-block">{new Date(bet.stakingDeadline * 1000).toISOString().slice(0, 16).replace("T", " ")}</span>
                                     </div>
                                 </td>
 
@@ -80,17 +92,56 @@ export default function BetTable({
                                         <span className="name d-block">{bet.creatorBetDescription}</span>
                                     </div>
                                 </td>
-                                { filters.state == STATE_VOTING &&
-                                    <td>
-                                        <div>
-                                            <span className="name d-block">{(((new Date().getTime() / 1000) - bet.stakingDeadline) / 3600).toFixed(1)} h</span>
-                                        </div>
-                                    </td>
-                                }
 
                                 <td>
                                     <div>
-                                        <span className="name d-block">{(bet.backerStake / 1000000000000000000)} ETH </span>
+                                        <span className="name d-block">
+                                            <a href={'https://etherscan.io/address/' + bet.creator}>
+                                                {bet.creator.slice(0, 5) + '...' + bet.creator.slice(-3, bet.creator.length)}
+                                                {bet.creator === account && '(You)'}
+                                            </a> <div>---------</div> {bet.backer === "0x0000000000000000000000000000000000000000" && "Open!"}
+                                            {bet.backer !== "0x0000000000000000000000000000000000000000" &&
+                                                <a href={'https://etherscan.io/address/' + bet.backer}>
+                                                    {bet.backer.slice(0, 5) + '...' + bet.backer.slice(-3, bet.backer.length)}
+                                                    {bet.backer === account && '(You)'}
+                                                </a>}
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+
+                                    <div>
+                                        <span className="name d-block">{(bet.creatorStake / ETH).toPrecision(5)} </span>
+                                    </div>
+                                    <div>
+                                        <span className="name d-block">{(bet.backerStake / ETH).toPrecision(5)} </span>
+                                    </div>
+                                    <div>---------</div>
+                                    <div>
+                                        <span className="name d-block">
+                                            {((bet.backerStake / ETH) + (bet.creatorStake / ETH)).toPrecision(5)} </span>
+                                    </div>
+                                </td>
+
+                                <td>
+
+                                    <div>
+                                        <span className="name d-block">
+                                            {(1 / ((bet.creatorStake / ETH) / ((bet.backerStake / ETH) + (bet.creatorStake / ETH)))).toPrecision(6)} </span>
+                                    </div>
+                                    <div>
+                                        <span className="name d-block">
+                                            {(((bet.creatorStake / ETH) / ((bet.backerStake / ETH) + (bet.creatorStake / ETH)))).toPrecision(5)} </span>
+                                    </div>
+                                    <div>---------</div>
+                                    <div>
+                                        <span className="name d-block">
+                                            {(1 / ((bet.backerStake / ETH) / ((bet.backerStake / ETH) + (bet.creatorStake / ETH)))).toPrecision(5)} </span>
+                                    </div>
+                                    <div>
+                                        <span className="name d-block">
+                                            {(((bet.backerStake / ETH) / ((bet.backerStake / ETH) + (bet.creatorStake / ETH)))).toPrecision(5)} </span>
                                     </div>
                                 </td>
 
@@ -98,19 +149,48 @@ export default function BetTable({
                                     <div>
                                         <span className="name d-block">{(bet.country <= MAX_COUNTRY ? countryOptions[bet.country].label : "Invalid Country")}</span>
                                     </div>
-                                </td>
 
-                                <td>
                                     <div>
                                         <span className="name d-block">{(bet.category <= MAX_CATEGORY ? categoryOptions[bet.category].label : "Invalid Category")}</span>
                                     </div>
-                                </td>
 
-                                <td>
                                     <div>
                                         <span className="name d-block">{bet.league}</span>
                                     </div>
                                 </td>
+
+                                { filters.state == STATE_VOTING &&
+                                    (((bet.votingDeadline - (new Date().getTime() / 1000)) / 3600) > 0 ?
+                                        <td>
+                                            <div>
+                                                <span className="name d-block">{((bet.votingDeadline - (new Date().getTime() / 1000)) / 3600).toFixed(2)} h</span>
+                                            </div>
+                                        </td>
+                                        :
+                                        <td>
+                                            <div>
+                                                <span className="name d-block">Voting ended</span>
+                                            </div>
+                                        </td>
+                                    )
+                                }
+
+                                { (filters.state == STATE_AGREEMENT || filters.state == STATE_RESOLVED) &&
+                                    <td>
+                                        <div>
+                                            <span className="name d-block">{OutcomeToText[bet.outcome]}</span>
+                                        </div>
+                                    </td>
+                                }
+
+                                { filters.state == STATE_DISAGREEMENT &&
+                                    <td>
+                                        <div>
+                                            <span className="name d-block">Players did not agree on the result. A player can send the bet to arbitration!</span>
+                                        </div>
+                                    </td>
+                                }
+
                                 <td>
                                     <div className="col px-2">
                                         {(bet.state === STATE_OPEN
@@ -156,7 +236,17 @@ export default function BetTable({
                                                 ClaimWinnings
                                             </button>}
                                         {bet.state === STATE_REFUNDED && <p>Refunded</p>}
-                                        {bet.state === STATE_RESOLVED && <p>Resolved</p>}
+                                        {(bet.state == STATE_RESOLVED ?
+                                            ((bet.creator === account || bet.backer === account) ?
+                                                ((bet.state === STATE_RESOLVED
+                                                    && ((bet.creator === account && bet.outcome == CREATOR_WINS)
+                                                        || (bet.backer === account && bet.outcome == BACKER_WINS)))
+                                                    ? <p>You won</p>
+                                                    : <p>You lost</p>)
+                                                : <p>Resolved</p>)
+                                            : ""
+                                        )
+                                        }
                                         {bet.state === STATE_DISPUTED && <a href={"https://court.kleros.io/cases/" + bet.disputeID}>In arbitration</a>}
                                     </div>
                                 </td>

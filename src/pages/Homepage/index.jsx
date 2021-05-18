@@ -62,6 +62,7 @@ export default function Homepage({ account, filters, setFilters, loading, error,
       filters.category = '';
       filters.league = '';
       filters.state = STATE_OPEN;
+      filters.account = '';
       return filters;
     });
   }
@@ -141,7 +142,7 @@ export default function Homepage({ account, filters, setFilters, loading, error,
                 </div>
               </div>
               {error && <div><p>Error loading data</p></div>}
-              <div className="bet-tab">
+              <div className="row">
                 <EventTable
                   betData={data && { data }}
                   error={error}

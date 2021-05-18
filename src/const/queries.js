@@ -116,7 +116,7 @@ export const EVENTS_QUERY = gql`
 `;
 
 export const GET_BETS = gql`
-    query getBetsFromEvent($country: Int,
+    query getBets($country: Int,
                            $category: Int,
                            $league: String,
                            $state: Int,
@@ -139,6 +139,7 @@ export const GET_BETS = gql`
         creator
         creatorStake
         stakingDeadline
+        votingDeadline
         backer
         backerStake
         timeCreated
@@ -161,6 +162,7 @@ export const GET_BETS = gql`
         creator
         creatorStake
         stakingDeadline
+        votingDeadline
         backer
         backerStake
         timeCreated
@@ -184,6 +186,7 @@ export const GET_BETS = gql`
       creator
       creatorStake
       stakingDeadline
+      votingDeadline
       backer
       backerStake
       timeCreated
@@ -206,6 +209,7 @@ export const GET_BETS = gql`
       creator
       creatorStake
       stakingDeadline
+      votingDeadline
       backer
       backerStake
       timeCreated
@@ -229,6 +233,7 @@ export const GET_BETS = gql`
       creator
       creatorStake
       stakingDeadline
+      votingDeadline
       backer
       backerStake
       timeCreated
@@ -251,6 +256,7 @@ export const GET_BETS = gql`
       creator
       creatorStake
       stakingDeadline
+      votingDeadline
       backer
       backerStake
       timeCreated
@@ -273,6 +279,7 @@ export const GET_BETS = gql`
       creator
       creatorStake
       stakingDeadline
+      votingDeadline
       backer
       backerStake
       timeCreated
@@ -295,6 +302,7 @@ export const GET_BETS = gql`
       creator
       creatorStake
       stakingDeadline
+      votingDeadline
       backer
       backerStake
       timeCreated
@@ -317,6 +325,7 @@ export const GET_BETS = gql`
       creator
       creatorStake
       stakingDeadline
+      votingDeadline
       backer
       backerStake
       timeCreated
