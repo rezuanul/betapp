@@ -86,7 +86,8 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
     setShow(true);
     setFilters({
       ...filters,
-      league: formikForm.values.league
+      league: formikForm.values.league,
+      eventID: ''
     })
     let [year, month, day] = formikForm.values.startDate.split("-");
     let [hours, minutes] = formikForm.values.startTime.split(":");
