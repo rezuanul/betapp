@@ -29,16 +29,16 @@ export default function resolveFilterVariablesForQuery(filters) {
   let queryVariables = {
     noParams: (filters.category === ''
       && filters.country === ''
-      && filters.league == undefined),
+      && filters.league === ''),
     categoryB: filters.category !== '',
     countryB: (filters.country !== ''),
-    leagueB: filters.league != undefined,
+    leagueB: filters.league != '',
     countryCategoryB: (filters.country !== '' && filters.category !== ''),
-    countryLeagueB: (filters.country !== '' && filters.league != undefined),
-    categoryLeagueB: (filters.category !== '' && filters.league != undefined),
+    countryLeagueB: (filters.country !== '' && filters.league != ''),
+    categoryLeagueB: (filters.category !== '' && filters.league != ''),
     countryCategoryLeagueB: (filters.category !== ''
       && filters.country !== ''
-      && filters.league != undefined)
+      && filters.league != '')
   };
 
   if (queryVariables.countryCategoryLeagueB) {

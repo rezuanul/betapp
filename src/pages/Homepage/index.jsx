@@ -10,19 +10,13 @@ import resolveFilterVariablesForQuery from '../../interaction/filterBooleanResol
 
 import EventTable from '../../components/EventTable';
 import { STATE_OPEN } from '../../const/contractEnums';
-import { useQuery, useLazyQuery } from '@apollo/client';
 
-import { EVENTS_QUERY } from '../../const/queries'
-
-export default function Homepage({ account, filters, setFilters }) {
-
-  const { loading, error, data, refetch } = useQuery(EVENTS_QUERY, {
-    variables: resolveFilterVariablesForQuery(filters)
-  });
+export default function Homepage({ account, filters, setFilters, loading, error, data, refetch }) {
 
   const countryFilterHandler = async (e) => {
     await setFilters(filters => {
       filters.country = e.target.value;
+      filters.eventID = null;
       return filters;
     });
     refetch(resolveFilterVariablesForQuery(filters));
@@ -31,14 +25,17 @@ export default function Homepage({ account, filters, setFilters }) {
   const leagueFilterHandler = async (e) => {
     await setFilters(filters => {
       filters.league = e.target.value;
+      filters.eventID = null;
       return filters;
     });
+    e.target.value = filters.league
     refetch(resolveFilterVariablesForQuery(filters));
   }
 
   const categoryFilterHandler = async (e) => {
     await setFilters(filters => {
       filters.category = e.target.value;
+      filters.eventID = null;
       return filters;
     });
     refetch(resolveFilterVariablesForQuery(filters));
@@ -46,7 +43,7 @@ export default function Homepage({ account, filters, setFilters }) {
 
   const resetFilters = async () => {
     await setFilters(filters => {
-      filters.league = undefined;
+      filters.league = '';
       filters.category = '';
       filters.country = '';
       filters.eventID = null;
@@ -61,7 +58,7 @@ export default function Homepage({ account, filters, setFilters }) {
       filters.eventID = eventID;
       filters.country = '';
       filters.category = '';
-      filters.league = undefined;
+      filters.league = '';
       filters.state = STATE_OPEN;
       return filters;
     });
@@ -90,7 +87,7 @@ export default function Homepage({ account, filters, setFilters }) {
                     <Form.Group controlId="SelectCountry">
                       <Form.Label>Country</Form.Label>
                       <Form.Control
-                        value={filters.country}
+                        value={((filters.country) ? filters.country : 0)}
                         onChange={countryFilterHandler}
                         as="select"
                         custom
@@ -105,7 +102,7 @@ export default function Homepage({ account, filters, setFilters }) {
                     <Form.Group controlId="SelectCategory">
                       <Form.Label>Category</Form.Label>
                       <Form.Control
-                        value={filters.category}
+                        value={((filters.category) ? filters.category : 0)}
                         onChange={categoryFilterHandler}
                         as="select"
                         custom
@@ -121,7 +118,7 @@ export default function Homepage({ account, filters, setFilters }) {
                       <Form.Label>League</Form.Label>
                       <Form.Control
                         className="w-100"
-                        value={(filters.league ? filters.league : '')}
+                        value={filters.league}
                         onChange={leagueFilterHandler}
                         as="input"
                         custom

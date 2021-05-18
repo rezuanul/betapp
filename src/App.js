@@ -13,8 +13,13 @@ import Arbitrator from './abis/Arbitrator.json'
 import Web3 from 'web3'
 import Archon from '@kleros/archon'
 import { create } from 'ipfs-http-client'
+import { useQuery } from '@apollo/client';
 
 import { STATE_OPEN } from './const/contractEnums';
+
+import { EVENTS_QUERY } from './const/queries'
+import resolveFilterVariablesForQuery from './interaction/filterBooleanResolver';
+
 
 const BET_CONTRACT_ADDRESS = "0x2E6318CC9006f132265fDBf9F68569172101Bb6f";
 const ARBITRATOR_CONTRACT_ADDRESS = "0xB767De12E3c01F31a437Edc69016D4d6E09bcc68"
@@ -55,11 +60,18 @@ function App() {
   const [filters, setFilters] = useState({
     country: '',
     category: '',
-    league: undefined, // The undefined value, We can't give the parameter as undefined to the query, and we want to also query the empty string.
+    league: '', // The undefined value, We can't give the parameter as undefined to the query, and we want to also query the empty string.
     eventID: null, // For showing the bets under one event. Overridden if any other filter is selected.
     state: STATE_OPEN,
     account: ''
   })
+
+  // Queries
+  /////////////////////////////////////////////////
+
+  const { loading, error, data, refetch } = useQuery(EVENTS_QUERY, {
+    variables: resolveFilterVariablesForQuery(filters)
+  });
 
   /// called on every render. "Listens" to account changes.
   useEffect(() => {
@@ -106,6 +118,10 @@ function App() {
           account={account}
           filters={filters}
           setFilters={setFilters}
+          loading={loading}
+          error={error}
+          data={data}
+          refetch={refetch}
         />} />
         <Route exact path="/event" render={props => <Event
           betContract={betContract}

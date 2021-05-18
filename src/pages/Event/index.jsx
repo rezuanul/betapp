@@ -6,7 +6,7 @@ import PageCover from '../../components/Layout/PageCover';
 import Modal from '../../components/Modal';
 import { useHistory } from 'react-router-dom';
 
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { countryOptionsArray, categoryOptionsArray } from '../../const/filterMappings';
 import { GET_BETS } from '../../const/queries';
 import resolveFilterVariablesForQuery from '../../interaction/filterBooleanResolver';
@@ -81,6 +81,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
       filters.eventID = null;
       return filters;
     });
+    e.target.value = filters.league
     refetch(resolveFilterVariablesForQuery(filters));
   }
 
@@ -104,7 +105,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
 
   const resetFilters = async () => {
     await setFilters(filters => {
-      filters.league = undefined;
+      filters.league = '';
       filters.category = '';
       filters.country = '';
       filters.state = STATE_OPEN;
@@ -232,7 +233,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
                   custom
                 >
                   {StateToText.map((value, key) => (
-                    <option value={key}>{value}</option>
+                    <option key={value} value={key}>{value}</option>
                   ))}
                 </Form.Control>
               </Form.Group>
