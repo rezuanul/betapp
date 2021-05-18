@@ -102,7 +102,7 @@ export default function Homepage({ account, filters, setFilters, loading, error,
           </div>
 
           <div className="col mt-3">
-            <div className="row">
+
               <div className="container">
 
                  <div className="row">
@@ -169,7 +169,6 @@ export default function Homepage({ account, filters, setFilters, loading, error,
 
               </div>
 
-            </div>
           </div>
 
         </div>

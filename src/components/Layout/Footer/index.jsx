@@ -1,9 +1,9 @@
 export default function index() {
   return (
-    <div className="mt-7 py-5 bg-primary footer">
+    <div className="mt-5 py-4 bg-primary footer fixed-bottom">
       <div className="container">
         <div className="row">
-          <div className="col-md-5">
+          <div className="col-md-10">
             <h4>About Gambleboard</h4>
 
             <p>
@@ -11,22 +11,32 @@ export default function index() {
             </p>
           </div>
 
-          <div className="col-md-4">
-            <h4>Powered By</h4>
+          <div className="col-md-2">
+            <div className="container">
+                <h5>Powered By</h5>
+                <div className="row">
 
-            <img
-              className="img-fluid"
-              src="https://block-builders.nl/wp-content/uploads/2021/01/Graph-Protocol-678x381.png"
-              alt="Powered By"
-            />
+                    <div className="col">
+                        <img
+                          className="img-fluid"
+                          src="https://block-builders.nl/wp-content/uploads/2021/01/Graph-Protocol-678x381.png"
+                          alt="Powered By"
+                        />
+                    </div>
+
+                    <div className="col">
+                        <img
+                          className="img-fluid"
+                          src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Kleros-logo.png"
+                          alt="Powered By"
+                        />
+                    </div>
+
+                  </div>
+            </div>
           </div>
-          <div className="col-md-3">
-            <img
-              className="img-fluid"
-              src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Kleros-logo.png"
-              alt="Powered By"
-            />
-          </div>
+            
+          
         </div>
 
         <div className="row">

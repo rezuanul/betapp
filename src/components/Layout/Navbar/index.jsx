@@ -16,12 +16,12 @@ export default function Navbar(connectMetamaskHandler) {
   ];
 
   return (
-    <nav className={classnames('navbar navbar-expand-lg navbar-dark bg-primary')}>
+    <nav className='navbar navbar-expand-lg navbar-dark bg-primary'>
       <div className="container">
         <a className="navbar-brand" href="/">
           GambleBoard
         </a>
-        <div className="collapse navbar-collapse">
+ 
           <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
             {primaryRoutes.map((routes) => (
               <li key={routes.key} className="nav-item">
@@ -31,7 +31,7 @@ export default function Navbar(connectMetamaskHandler) {
               </li>
             ))}
           </ul>
-        </div>
+
       </div>
     </nav>
   );
