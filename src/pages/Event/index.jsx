@@ -72,6 +72,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
       filters.eventID = null;
       return filters;
     });
+    e.target.value = filters.country;
     refetch(resolveFilterVariablesForQuery(filters));
   }
 
@@ -81,7 +82,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
       filters.eventID = null;
       return filters;
     });
-    e.target.value = filters.league
+    e.target.value = filters.league;
     refetch(resolveFilterVariablesForQuery(filters));
   }
 
@@ -91,6 +92,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
       filters.eventID = null;
       return filters;
     });
+    e.target.value = filters.category;
     refetch(resolveFilterVariablesForQuery(filters));
   }
 
@@ -100,6 +102,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
       filters.eventID = null;
       return filters;
     });
+    e.target.value = filters.state;
     refetch(resolveFilterVariablesForQuery(filters));
   }
 
@@ -112,24 +115,21 @@ export default function Event({ betContract, arbitratorContract, account, filter
       filters.eventID = null;
       return filters;
     });
-
     refetch(resolveFilterVariablesForQuery(filters));
   }
 
   const yourBetsHandler = async (e) => {
-    if (filters.account === account) {
-      await setFilters(filters => {
-        filters.account = '';
-        return filters;
-      });
-      e.target.innerText = 'Show your bets';
-    } else {
-      await setFilters(filters => {
-        filters.account = account;
-        return filters;
-      });
-      e.target.innerText = 'Show all bets';
-    }
+    let acc = '';
+    let buttonText = 'Show your bets';
+    if (filters.account !== account) {
+      acc = account;
+      buttonText = 'Show all bets'
+    } 
+    await setFilters(filters => {
+      filters.account = acc;
+      return filters;
+    });
+    e.target.innerText = buttonText;
     refetch(resolveFilterVariablesForQuery(filters));
   }
 
@@ -236,7 +236,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
             </div>
             <div className="col">
               <Form>
-                <Form.Group controlId="SelectCategory">
+                <Form.Group controlId="SelectState">
                   <Form.Label>State</Form.Label>
                   <Form.Control
                     value={filters.state}
@@ -255,7 +255,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
             <div className="col">
               <Form>
                 <Form.Group controlId="SelectLeague">
-                  <Form.Label>League</Form.Label>
+                  <Form.Label>League {filters.league && "(Selected)"}</Form.Label>
                   <Form.Control
                     className="w-100"
                     value={filters.league}
@@ -281,6 +281,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
               disputeBetHandler={disputeBetHandler}
               refundBetHandler={refundBetHandler}
               claimWinningsHandler={claimWinningsHandler}
+              filters={filters}
             />
           </div>
         </div>

@@ -19,6 +19,7 @@ export default function Homepage({ account, filters, setFilters, loading, error,
       filters.eventID = null;
       return filters;
     });
+    e.target.value = filters.country;
     refetch(resolveFilterVariablesForQuery(filters));
   }
 
@@ -28,7 +29,7 @@ export default function Homepage({ account, filters, setFilters, loading, error,
       filters.eventID = null;
       return filters;
     });
-    e.target.value = filters.league
+    e.target.value = filters.league;
     refetch(resolveFilterVariablesForQuery(filters));
   }
 
@@ -38,6 +39,7 @@ export default function Homepage({ account, filters, setFilters, loading, error,
       filters.eventID = null;
       return filters;
     });
+    e.target.value = filters.category;
     refetch(resolveFilterVariablesForQuery(filters));
   }
 
@@ -140,7 +142,12 @@ export default function Homepage({ account, filters, setFilters, loading, error,
               </div>
               {error && <div><p>Error loading data</p></div>}
               <div className="bet-tab">
-                <EventTable betData={data && { data }} error={error} loading={loading} showBetsHandler={showBetsHandler} />
+                <EventTable
+                  betData={data && { data }}
+                  error={error}
+                  loading={loading}
+                  showBetsHandler={showBetsHandler}
+                />
               </div>
             </div>
           </div>

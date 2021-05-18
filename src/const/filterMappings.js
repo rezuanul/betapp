@@ -20,6 +20,8 @@ export const categoryOptions = [
     { value: 18, label: 'Weightlifting' },
 ];
 
+export const MAX_CATEGORY = categoryOptions.length;
+
 export const countryOptions = [
     { value: 0, label: 'Afghanistan' },
     { value: 1, label: 'Albania' },
@@ -225,6 +227,8 @@ export const countryOptions = [
     { value: 201, label: 'Asia' },
     { value: 202, label: 'Africa' },
 ];
+
+export const MAX_COUNTRY = countryOptions.length;
 
 export const countryOptionsArray = [];
 countryOptions.map(option =>
