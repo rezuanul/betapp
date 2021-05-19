@@ -1,3 +1,6 @@
+import klerosLogo from '../../../assets/pictures/KlerosLogo.jpg'
+import graphLogo from '../../../assets/pictures/TheGraph.jpg'
+
 export default function index() {
   return (
     <div className="mt-5 py-4 bg-primary footer">
@@ -20,7 +23,7 @@ export default function index() {
                   <a href="https://thegraph.com/"  target="_blank" rel="noreferer">
                     <img
                       className="img-fluid"
-                      src="https://block-builders.nl/wp-content/uploads/2021/01/Graph-Protocol-678x381.png"
+                      src={graphLogo}
                       alt="Powered By"
                     />
                   </a>
@@ -30,7 +33,7 @@ export default function index() {
                   <a href="https://kleros.io/" target="_blank" rel="noreferer">
                     <img
                       className="img-fluid"
-                      src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Kleros-logo.png"
+                      src={klerosLogo}
                       alt="Powered By"
                     />
                   </a>
