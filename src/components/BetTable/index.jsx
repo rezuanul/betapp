@@ -247,31 +247,30 @@ export default function BetTable({
                                             : ""
                                         )
                                         }
-                                        {bet.state === STATE_DISPUTED && <a href={"https://court.kleros.io/cases/" + bet.disputeID}>In arbitration</a>}
+                                        {bet.state === STATE_DISPUTED && <a href={"https://court.kleros.io/cases/" + bet.disputeID} target="_blank">In arbitration</a>}
                                     </div>
                                 </td>
                             </tr>
                         ))}
                         {loading &&
-                            <tr>
-                                <td colSpan={4}>
-                                    <div className="d-flex">
-                                        <div className="content">
-                                            <span className="name d-block">{'Loading bets'}</span>
-                                        </div>
+                            <td colSpan={8}>
+                                <div className="d-flex">
+                                    <div className="content">
+                                        <span className="name d-block">{'Loading bets'}</span>
                                     </div>
-                                </td>
-                            </tr>}
+                                </div>
+                            </td>
+                        }
                         {error &&
-                            <tr>
-                                <td colSpan={4}>
-                                    <div className="d-flex">
-                                        <div className="content">
-                                            <span className="name d-block">{'An error happened while loading the bets'}</span>
-                                        </div>
+
+                            <td colSpan={8}>
+                                <div className="d-flex">
+                                    <div className="content">
+                                        <span className="name d-block">{'An error happened while loading the bets'}</span>
                                     </div>
-                                </td>
-                            </tr>}
+                                </div>
+                            </td>
+                        }
                     </tbody>
                 </table>
             </div>

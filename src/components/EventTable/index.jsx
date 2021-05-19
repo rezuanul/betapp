@@ -77,7 +77,7 @@ export default function EventTable({ betData, error, loading, showBetsHandler })
             ))}
             {loading &&
               <tr>
-                <td colSpan={4}>
+                <td colSpan={8}>
                   <div className="d-flex">
                     <div className="content">
                       <span className="name d-block">{'Loading events'}</span>
@@ -87,7 +87,7 @@ export default function EventTable({ betData, error, loading, showBetsHandler })
               </tr>}
             {error &&
               <tr>
-                <td colSpan={4}>
+                <td colSpan={8}>
                   <div className="d-flex">
                     <div className="content">
                       <span className="name d-block">{'An error happened while loading the events'}</span>
