@@ -100,8 +100,8 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
     try {
       result = await ipfsClient.add(fileObject);
     } catch {
-      handleBetCreated();
-      return
+      handleRejected();
+      return;
     }
 
     betContract.methods
