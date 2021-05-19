@@ -81,7 +81,7 @@ export default function Homepage({ account, filters, setFilters, loading, error,
             <div className="container">
 
               <div className="btn btn-block mt-3">
-                <Button href="/create-bet" variant="danger" block>
+                <Button href="/create-bet" variant="success" block>
                   Create a Bet
                     </Button>
               </div>

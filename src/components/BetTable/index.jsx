@@ -60,9 +60,11 @@ export default function BetTable({
                                 <div>Odd</div>
                                 <div>Prob</div>
                             </th>
-                            <th><div>Country</div> <div>Category</div>  <div>League</div></th>
-                            {/* <th>Metaevidence</th>
-                            <th>Dispute ID</th> */}
+                            <th>
+                                <div>Country</div>
+                                <div>Category</div>
+                                <div>League</div>
+                            </th>
                             {filters.state == STATE_VOTING && <th>Time left to vote</th>}
                             {(filters.state == STATE_AGREEMENT || filters.state == STATE_RESOLVED) && <th>Outcome</th>}
                             {filters.state == STATE_DISAGREEMENT && <th>Disagreement</th>}
@@ -70,6 +72,7 @@ export default function BetTable({
                         </tr>
                     </thead>
                     <tbody>
+                        {betData.data.bets.length == 0 && <span>No bets found. Check your filters?</span>}
                         {betData && betData.data.bets.map((bet) => (
                             <tr key={bet.id}>
 
@@ -199,10 +202,21 @@ export default function BetTable({
                                             <button id="backBet" onClick={() => backBetHandler(bet.id, bet.backerStake)} className="btn btn-primary btn-block">
                                                 Back Bet
                                         </button>}
-                                        {(bet.state === STATE_VOTING
-                                            && (bet.creator === account || bet.backer === account)
-                                            && !((bet.creator === account && bet.creatorHasVoted) || (bet.backer === account && bet.backerHasVoted))) ?
-                                            (<div>
+
+                                        {(bet.state === STATE_OPEN
+                                            && bet.stakingDeadline > new Date().getTime() / 1000
+                                            && bet.creator === account) &&
+                                            <div>
+                                                <span>You can't back your own bet</span>
+                                            </div>
+                                        }
+
+
+                                        {((bet.state === STATE_VOTING && bet.votingDeadline > new Date().getTime() / 1000)
+                                            && (bet.creator === account || bet.backer === account) // OnlyPlayers
+                                            && !((bet.creator === account && bet.creatorHasVoted) || (bet.backer === account && bet.backerHasVoted)))
+                                            &&
+                                            <div>
                                                 <button id="creatorWins" onClick={() => voteHandler(bet.id, CREATOR_WINS)} className="btn btn-light btn-block">
                                                     Creator wins
                                                 </button>
@@ -213,29 +227,72 @@ export default function BetTable({
                                                     Undecidable
                                                 </button>
                                             </div>
-                                            ) : ((bet.state === STATE_VOTING && (bet.creator === account || bet.backer === account)) && <p>Voted</p>)}
+
+                                        }
+
+                                        {// Show voted if State voting and the player has voted
+                                            (bet.state === STATE_VOTING
+                                                && ((bet.creator === account && bet.creatorHasVoted) || (bet.backer === account && bet.backerHasVoted)))
+                                            && <p>Voted</p>
+                                        }
 
                                         {(bet.state === STATE_DISAGREEMENT && (bet.creator === account || bet.backer === account)) &&
                                             <button id="dispute" onClick={() => disputeBetHandler(bet.id)} className="btn btn-danger btn-block">
                                                 Dispute
                                             </button>}
+
                                         {((bet.outcome === NO_OUTCOME)
                                             && ((bet.state === STATE_VOTING && bet.votingDeadline < new Date().getTime() / 1000)
                                                 || bet.state === STATE_AGREEMENT
                                                 || (bet.state === STATE_OPEN && bet.stakingDeadline < new Date().getTime() / 1000)
-                                            )
+                                            ) // Voting ended, there was an agreement or there was no other player
                                             && ((bet.creator === account && bet.creatorStake != 0) || (bet.backer === account && bet.backerStake != 0))) &&
-                                            <button id="refund" onClick={() => refundBetHandler(bet.id)} className="btn btn-warning btn-block">
-                                                Refund
-                                            </button>
+                                            <div>
+                                                {bet.state != STATE_OPEN && (!bet.creatorHasVoted && !bet.backerHasVoted) && <p>No players voted </p>}
+                                                {bet.state != STATE_OPEN && (bet.backerHasVoted && bet.creatorHasVoted) && <p>Undedicable</p>}
+                                                {bet.state == STATE_OPEN && <p>No player backed the bet in time</p>}
+                                                <button id="refund" onClick={() => refundBetHandler(bet.id)} className="btn btn-warning btn-block">
+                                                    Refund
+                                                </button>
+                                            </div>
                                         }
-                                        {(bet.state === STATE_AGREEMENT
+
+                                        {bet.state == STATE_OPEN
+                                            && bet.stakingDeadline < new Date().getTime() / 1000
+                                            && bet.creator != account &&
+                                            <div>
+                                                <span>Closed, event started</span>
+                                            </div>
+                                        }
+
+                                        {((bet.outcome === NO_OUTCOME)
+                                            && ((bet.state === STATE_VOTING && bet.votingDeadline < new Date().getTime() / 1000)
+                                                || bet.state === STATE_AGREEMENT
+                                                || (bet.state === STATE_OPEN && bet.stakingDeadline < new Date().getTime() / 1000)
+                                            ) // Voting ended, there was an agreement or there was no other player
+                                            && ((bet.creator === account && bet.creatorStake == 0) || (bet.backer === account && bet.backerStake == 0))) &&
+                                            <div>
+                                                <p>You refunded</p>
+                                            </div>
+                                        }
+
+                                        {((bet.state === STATE_AGREEMENT
+                                            || (bet.state == STATE_VOTING && bet.votingDeadline < new Date().getTime() / 1000))
                                             && ((bet.creator === account && bet.outcome == CREATOR_WINS)
                                                 || (bet.backer === account && bet.outcome == BACKER_WINS))) &&
                                             <button id="claimWinnings" onClick={() => claimWinningsHandler(bet.id)} className="btn btn-success btn-block">
                                                 ClaimWinnings
                                             </button>}
+
+                                        {(bet.outcome != NO_OUTCOME // Show lost to losing player if only one player voted either backer wins or creator wins
+                                            && (bet.state === STATE_AGREEMENT
+                                                || (bet.state == STATE_VOTING && bet.votingDeadline < new Date().getTime() / 1000))
+                                            && ((bet.creator === account && bet.outcome != CREATOR_WINS)
+                                                || (bet.backer === account && bet.outcome != BACKER_WINS))) &&
+                                            <p>You lost</p>}
+
                                         {bet.state === STATE_REFUNDED && <p>Refunded</p>}
+
                                         {(bet.state == STATE_RESOLVED ?
                                             ((bet.creator === account || bet.backer === account) ?
                                                 ((bet.state === STATE_RESOLVED
@@ -247,7 +304,9 @@ export default function BetTable({
                                             : ""
                                         )
                                         }
+
                                         {bet.state === STATE_DISPUTED && <a href={"https://court.kleros.io/cases/" + bet.disputeID} target="_blank">In arbitration</a>}
+
                                     </div>
                                 </td>
                             </tr>

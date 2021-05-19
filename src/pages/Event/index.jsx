@@ -187,7 +187,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
           <div className="container">
 
             <div className="btn btn-block mt-3">
-              <Button href="/create-bet" variant="danger" block>
+              <Button href="/create-bet" variant="success" block>
                 Create a Bet
                 </Button>
             </div>
