@@ -76,7 +76,7 @@ export default function BetTable({
                         {betData && betData.data.bets.map((bet) => (
                             <tr key={bet.id}>
 
-                                <td style={{ textAlign: "left" }}>
+                                <td style={{ textAlign: "left", wordWrap: "anywhere" }}>
                                     <div className="d-flex">
                                         <div className="content">
                                             <span className="name d-block">{bet.description}</span>
