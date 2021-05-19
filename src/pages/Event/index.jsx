@@ -181,124 +181,126 @@ export default function Event({ betContract, arbitratorContract, account, filter
   return (
     <div>
       <PageCover description={"Search and Back bets"} />
-      <div className="mt-5 row">
+      <div className="col">
+        <div className="mt-5 row">
+  
+          <div className="col-sm-2 ">
+            <div className="container">
 
-        <div className="col-sm-2 ">
-          <div className="container">
+              <div className="btn btn-block mt-3">
+                <Button href="/create-bet" variant="success" block>
+                  Create a Bet
+                  </Button>
+              </div>
 
-            <div className="btn btn-block mt-3">
-              <Button href="/create-bet" variant="success" block>
-                Create a Bet
-                </Button>
-            </div>
+              <div className="btn btn-block mt-3">
+                <Button variant="warning" onClick={resetFilters} block>
+                  Reset filters
+                  </Button>
+              </div>
 
-            <div className="btn btn-block mt-3">
-              <Button variant="warning" onClick={resetFilters} block>
-                Reset filters
-                </Button>
-            </div>
+              <div className="btn btn-block mt-3">
+                <Button variant="outline-success" onClick={yourBetsHandler} block>
+                  Show your bets
+                  </Button>
+              </div>
 
-            <div className="btn btn-block mt-3">
-              <Button variant="outline-success" onClick={yourBetsHandler} block>
-                Show your bets
-                </Button>
-            </div>
+              <div className="btn btn-block mt-3">
+                <Button variant="outline-primary" onClick={reloadHandler} block>
+                  Reload with current filters
+                  </Button>
+              </div>
 
-            <div className="btn btn-block mt-3">
-              <Button variant="outline-primary" onClick={reloadHandler} block>
-                Reload with current filters
-                </Button>
-            </div>
-
-          </div>
-        </div>
-
-        <div className="col">
-          <div className="row">
-
-            <div className="col">
-              <Form>
-                <Form.Group controlId="SelectCountry">
-                  <Form.Label>Country</Form.Label>
-                  <Form.Control
-                    value={(filters.country !== '' ? filters.country : 0)}
-                    onChange={countryFilterHandler}
-                    as="select"
-                    custom
-                  >
-                    {countryOptionsArray}
-                  </Form.Control>
-                </Form.Group>
-              </Form>
-            </div>
-            <div className="col">
-              <Form>
-                <Form.Group controlId="SelectCategory">
-                  <Form.Label>Category</Form.Label>
-                  <Form.Control
-                    value={((filters.category) ? filters.category : 0)}
-                    onChange={categoryFilterHandler}
-                    as="select"
-                    custom
-                  >
-                    {categoryOptionsArray}
-                  </Form.Control>
-                </Form.Group>
-              </Form>
-            </div>
-            <div className="col">
-              <Form>
-                <Form.Group controlId="SelectState">
-                  <Form.Label>State</Form.Label>
-                  <Form.Control
-                    value={filters.state}
-                    onChange={stateFilterHandler}
-                    as="select"
-                    custom
-                  >
-                    {StateToText.map((value, key) => (
-                      <option key={value} value={key}>{value}</option>
-                    ))}
-                  </Form.Control>
-                </Form.Group>
-              </Form>
-            </div>
-
-            <div className="col">
-              <Form>
-                <Form.Group controlId="SelectLeague">
-                  <Form.Label>League</Form.Label>
-                  <Form.Control
-                    className="w-100"
-                    value={filters.league}
-                    onChange={leagueFilterHandler}
-                    as="input"
-                    custom
-                  >
-
-                  </Form.Control>
-                </Form.Group>
-              </Form>
             </div>
           </div>
 
+          <div className="col">
+            <div className="row">
+
+              <div className="col">
+                <Form>
+                  <Form.Group controlId="SelectCountry">
+                    <Form.Label>Country</Form.Label>
+                    <Form.Control
+                      value={(filters.country !== '' ? filters.country : 0)}
+                      onChange={countryFilterHandler}
+                      as="select"
+                      custom
+                    >
+                      {countryOptionsArray}
+                    </Form.Control>
+                  </Form.Group>
+                </Form>
+              </div>
+              <div className="col">
+                <Form>
+                  <Form.Group controlId="SelectCategory">
+                    <Form.Label>Category</Form.Label>
+                    <Form.Control
+                      value={((filters.category) ? filters.category : 0)}
+                      onChange={categoryFilterHandler}
+                      as="select"
+                      custom
+                    >
+                      {categoryOptionsArray}
+                    </Form.Control>
+                  </Form.Group>
+                </Form>
+              </div>
+              <div className="col">
+                <Form>
+                  <Form.Group controlId="SelectState">
+                    <Form.Label>State</Form.Label>
+                    <Form.Control
+                      value={filters.state}
+                      onChange={stateFilterHandler}
+                      as="select"
+                      custom
+                    >
+                      {StateToText.map((value, key) => (
+                        <option key={value} value={key}>{value}</option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
+                </Form>
+              </div>
+
+              <div className="col">
+                <Form>
+                  <Form.Group controlId="SelectLeague">
+                    <Form.Label>League</Form.Label>
+                    <Form.Control
+                      className="w-100"
+                      value={filters.league}
+                      onChange={leagueFilterHandler}
+                      as="input"
+                      custom
+                    >
+
+                    </Form.Control>
+                  </Form.Group>
+                </Form>
+              </div>
+            </div>
 
 
 
-          <BetTable
-            account={account}
-            betData={data && { data }}
-            error={error}
-            loading={loading}
-            backBetHandler={backBetHandler}
-            voteHandler={voteHandler}
-            disputeBetHandler={disputeBetHandler}
-            refundBetHandler={refundBetHandler}
-            claimWinningsHandler={claimWinningsHandler}
-            filters={filters}
-          />
+
+            <BetTable
+              account={account}
+              betData={data && { data }}
+              error={error}
+              loading={loading}
+              backBetHandler={backBetHandler}
+              voteHandler={voteHandler}
+              disputeBetHandler={disputeBetHandler}
+              refundBetHandler={refundBetHandler}
+              claimWinningsHandler={claimWinningsHandler}
+              filters={filters}
+            />
 
 
+          </div>
         </div>
       </div>
       <Modal show={show}
