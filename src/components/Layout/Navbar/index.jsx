@@ -1,4 +1,3 @@
-import { Image } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import logo from '../../../assets/pictures/GambleBoard.png'
@@ -21,9 +20,10 @@ export default function Navbar(connectMetamaskHandler) {
       <div className="container">
         <a className="navbar-brand" href="/">
           <img
-          width="300"
-          height="40" 
+          width="280"
+          height="20" 
           className="img-fluid"
+          alt=""
           src={logo}/>
         </a>
  

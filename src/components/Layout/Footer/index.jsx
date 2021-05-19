@@ -17,7 +17,7 @@ export default function index() {
               <div className="row">
 
                 <div className="col">
-                  <a href="https://thegraph.com/"  target="_blank">
+                  <a href="https://thegraph.com/"  target="_blank" rel="noreferer">
                     <img
                       className="img-fluid"
                       src="https://block-builders.nl/wp-content/uploads/2021/01/Graph-Protocol-678x381.png"
@@ -27,7 +27,7 @@ export default function index() {
                 </div>
 
                 <div className="col">
-                  <a href="https://kleros.io/" target="_blank">
+                  <a href="https://kleros.io/" target="_blank" rel="noreferer">
                     <img
                       className="img-fluid"
                       src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Kleros-logo.png"

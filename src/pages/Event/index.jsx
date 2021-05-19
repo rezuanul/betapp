@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Col, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import BetTable from '../../components/BetTable';
 import PageCover from '../../components/Layout/PageCover';
 import Modal from '../../components/Modal';
@@ -10,7 +9,7 @@ import { useQuery } from '@apollo/client';
 import { countryOptionsArray, categoryOptionsArray } from '../../const/filterMappings';
 import { GET_BETS } from '../../const/queries';
 import resolveFilterVariablesForQuery from '../../interaction/filterBooleanResolver';
-import { StateToText, STATE_DISAGREEMENT, STATE_OPEN } from '../../const/contractEnums'
+import { StateToText, STATE_OPEN } from '../../const/contractEnums'
 
 
 export default function Event({ betContract, arbitratorContract, account, filters, setFilters, archon, ipfsClient }) {

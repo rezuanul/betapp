@@ -32,13 +32,13 @@ export default function resolveFilterVariablesForQuery(filters) {
       && filters.league === ''),
     categoryB: filters.category !== '',
     countryB: (filters.country !== ''),
-    leagueB: filters.league != '',
+    leagueB: filters.league !== '',
     countryCategoryB: (filters.country !== '' && filters.category !== ''),
-    countryLeagueB: (filters.country !== '' && filters.league != ''),
-    categoryLeagueB: (filters.category !== '' && filters.league != ''),
+    countryLeagueB: (filters.country !== '' && filters.league !== ''),
+    categoryLeagueB: (filters.category !== '' && filters.league !== ''),
     countryCategoryLeagueB: (filters.category !== ''
       && filters.country !== ''
-      && filters.league != '')
+      && filters.league !== '')
   };
 
   if (queryVariables.countryCategoryLeagueB) {
