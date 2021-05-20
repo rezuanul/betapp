@@ -26,7 +26,8 @@ export default function BetTable({
     disputeBetHandler,
     refundBetHandler,
     claimWinningsHandler,
-    filters
+    filters,
+    handleOpenEvidenceModal
 }) {
 
     return (
@@ -36,7 +37,11 @@ export default function BetTable({
                     <thead className="bg-primary text-white font-bold">
                         <tr>
                             <th style={{ textAlign: "left" }}>Event</th>
-                            <th>Start time</th>
+                            <th>
+                                <div>Starts</div>
+                                <div>----------</div>
+                                <div>Voting ends</div>
+                            </th>
                             <th>Creator Bet</th>
                             <th>
                                 <div> Creator</div>
@@ -62,7 +67,9 @@ export default function BetTable({
                             </th>
                             <th>
                                 <div>Country</div>
+                                <div>--------</div>
                                 <div>Category</div>
+                                <div>--------</div>
                                 <div>League</div>
                             </th>
                             {filters.state === STATE_VOTING && <th>Time left to vote</th>}
@@ -72,8 +79,8 @@ export default function BetTable({
                         </tr>
                     </thead>
                     <tbody>
-                        {betData && betData.data.bets.length === 0 && <span>No bets found. Check your filters?</span>}
-                        {betData && betData.data.bets.map((bet) => (
+                        {(betData && betData.data && betData.data.bets) && betData.data.bets.length === 0 && <span>No bets found. Check your filters?</span>}
+                        {(betData && betData.data && betData.data.bets) && betData.data.bets.map((bet) => (
                             <tr key={bet.id}>
 
                                 <td style={{ textAlign: "left", wordWrap: "anywhere" }}>
@@ -87,6 +94,10 @@ export default function BetTable({
                                 <td>
                                     <div>
                                         <span className="d-block">{new Date(bet.stakingDeadline * 1000).toISOString().slice(0, 16).replace("T", " ")}</span>
+                                    </div>
+                                    <div>----------------</div>
+                                    <div>
+                                        <span className="d-block">{new Date(bet.votingDeadline * 1000).toISOString().slice(0, 16).replace("T", " ")}</span>
                                     </div>
                                 </td>
 
@@ -102,7 +113,7 @@ export default function BetTable({
                                             <a href={'https://etherscan.io/address/' + bet.creator}>
                                                 {bet.creator.slice(0, 5) + '...' + bet.creator.slice(-3, bet.creator.length)}
                                                 {bet.creator === account && '(You)'}
-                                            </a> <div>---------</div> {bet.backer === "0x0000000000000000000000000000000000000000" && "Open!"}
+                                            </a> <div>----------</div> {bet.backer === "0x0000000000000000000000000000000000000000" && "Open!"}
                                             {bet.backer !== "0x0000000000000000000000000000000000000000" &&
                                                 <a href={'https://etherscan.io/address/' + bet.backer}>
                                                     {bet.backer.slice(0, 5) + '...' + bet.backer.slice(-3, bet.backer.length)}
@@ -115,15 +126,15 @@ export default function BetTable({
                                 <td>
 
                                     <div>
-                                        <span className="name d-block">{(bet.creatorStake / ETH).toPrecision(5)} </span>
+                                        <span className="name d-block">{bet.creatorStake > 0 ? (bet.creatorStake / ETH).toPrecision(5) : "Refunded"} </span>
                                     </div>
                                     <div>
-                                        <span className="name d-block">{(bet.backerStake / ETH).toPrecision(5)} </span>
+                                        <span className="name d-block">{bet.backerStake > 0 ? (bet.backerStake / ETH).toPrecision(5) : "Refunded"} </span>
                                     </div>
                                     <div>---------</div>
                                     <div>
                                         <span className="name d-block">
-                                            {((bet.backerStake / ETH) + (bet.creatorStake / ETH)).toPrecision(5)} </span>
+                                            {bet.creatorStake > 0 && bet.backerStake > 0 ? ((bet.backerStake / ETH) + (bet.creatorStake / ETH)).toPrecision(5) : "Refunded"} </span>
                                     </div>
                                 </td>
 
@@ -131,20 +142,20 @@ export default function BetTable({
 
                                     <div>
                                         <span className="name d-block">
-                                            {(1 / ((bet.creatorStake / ETH) / ((bet.backerStake / ETH) + (bet.creatorStake / ETH)))).toPrecision(6)} </span>
+                                            {bet.creatorStake > 0 && bet.backerStake > 0 ? (1 / ((bet.creatorStake / ETH) / ((bet.backerStake / ETH) + (bet.creatorStake / ETH)))).toPrecision(6) : "Refunded"} </span>
                                     </div>
                                     <div>
                                         <span className="name d-block">
-                                            {(((bet.creatorStake / ETH) / ((bet.backerStake / ETH) + (bet.creatorStake / ETH)))).toPrecision(5)} </span>
+                                            {bet.creatorStake > 0 && bet.backerStake > 0 ? (((bet.creatorStake / ETH) / ((bet.backerStake / ETH) + (bet.creatorStake / ETH)))).toPrecision(5) : "Refunded"} </span>
                                     </div>
                                     <div>---------</div>
                                     <div>
                                         <span className="name d-block">
-                                            {(1 / ((bet.backerStake / ETH) / ((bet.backerStake / ETH) + (bet.creatorStake / ETH)))).toPrecision(5)} </span>
+                                            {bet.backerStake > 0 && bet.creatorStake > 0 ? (1 / ((bet.backerStake / ETH) / ((bet.backerStake / ETH) + (bet.creatorStake / ETH)))).toPrecision(5) : "Refunded"} </span>
                                     </div>
                                     <div>
                                         <span className="name d-block">
-                                            {(((bet.backerStake / ETH) / ((bet.backerStake / ETH) + (bet.creatorStake / ETH)))).toPrecision(5)} </span>
+                                            {bet.backerStake > 0 && bet.creatorStake > 0 ? (((bet.backerStake / ETH) / ((bet.backerStake / ETH) + (bet.creatorStake / ETH)))).toPrecision(5) : "Refunded"} </span>
                                     </div>
                                 </td>
 
@@ -152,11 +163,11 @@ export default function BetTable({
                                     <div>
                                         <span className="name d-block">{(bet.country <= MAX_COUNTRY ? countryOptions[bet.country].label : "Invalid Country")}</span>
                                     </div>
-
+                                    <div>--------</div>
                                     <div>
                                         <span className="name d-block">{(bet.category <= MAX_CATEGORY ? categoryOptions[bet.category].label : "Invalid Category")}</span>
                                     </div>
-
+                                    <div>--------</div>
                                     <div>
                                         <span className="name d-block">{bet.league}</span>
                                     </div>
@@ -199,7 +210,7 @@ export default function BetTable({
                                         {(bet.state === STATE_OPEN
                                             && bet.stakingDeadline > new Date().getTime() / 1000
                                             && bet.creator !== account) &&
-                                            <button id="backBet" onClick={() => backBetHandler(bet.id, bet.backerStake)} className="btn btn-primary btn-block">
+                                            <button id="backBet" onClick={() => backBetHandler(bet.id, bet.backerStake)} className="btn btn-info btn-block">
                                                 Back Bet
                                         </button>}
 
@@ -305,30 +316,55 @@ export default function BetTable({
                                         )
                                         }
 
-                                        {bet.state === STATE_DISPUTED && <a href={"https://court.kleros.io/cases/" + bet.disputeID} target="_blank">In arbitration</a>}
+                                        {bet.state === STATE_DISPUTED
+                                            &&
+                                            <div>
+                                                <a href={"https://court.kleros.io/cases/" + bet.disputeID} target="_blank">In arbitration</a>
+                                            </div>
+                                        }
+
+                                        {(bet.state === STATE_DISPUTED
+                                            && ((bet.creator == account && !bet.creatorProvidedEvidence) || (bet.backer === account && !bet.backerProvidedEvidence)))
+                                            &&
+                                            <div>
+                                                <button id="submitEvidence" onClick={() => handleOpenEvidenceModal(bet.id)} className="btn btn-light btn-block">
+                                                    Submit evidence
+                                                </button>
+                                            </div>
+                                        }
+
+                                        {(bet.state === STATE_DISPUTED
+                                            && ((bet.creator == account && bet.creatorProvidedEvidence) || (bet.backer === account && bet.backerProvidedEvidence)))
+                                            &&
+                                            <div>
+                                                <span>You have provided evidence</span>
+                                            </div>}
 
                                     </div>
                                 </td>
                             </tr>
                         ))}
                         {loading &&
-                            <td colSpan={8}>
-                                <div className="d-flex">
-                                    <div className="content">
-                                        <span className="name d-block">{'Loading bets'}</span>
+                            <tr>
+                                <td colSpan={8}>
+                                    <div className="d-flex">
+                                        <div className="content">
+                                            <span className="name d-block">{'Loading bets'}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
+                                </td>
+                            </tr>
                         }
                         {error &&
-
-                            <td colSpan={8}>
-                                <div className="d-flex">
-                                    <div className="content">
-                                        <span className="name d-block">{'An error happened while loading the bets'}</span>
+                            <tr>
+                                <td colSpan={8}>
+                                    <div className="d-flex">
+                                        <div className="content">
+                                            <span className="name d-block">{'An error happened while loading the bets'}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>

@@ -60,7 +60,7 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
     league: ((filters.league) ? filters.league : ''),
     stake: 1000000000000000000,
     odd: 2000000,
-    timeToVote: 86401,
+    timeToVote: 24,
   };
 
   const validationSchema = yup.object().shape({
@@ -78,8 +78,19 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
     category: yup.string().required(),
     odd: yup.number().min(1000001, 'Odd has to be bigger than 1000000')
       .required(),
-    timeToVote: yup.number().min(86401, 'Time to vote should be over one day!')
+    timeToVote: yup.number().min(24, 'Time to vote should be atleast one day!')
   });
+
+  const getVotingDeadlineAsDateString = () => {
+    let [year, month, day] = formikForm.values.startDate.split("-");
+    let [hours, minutes] = formikForm.values.startTime.split(":");
+    if (hours && minutes) {
+      let startTimeAsUTC = Date.UTC(year, (parseInt(month) - 1).toString(), day, hours, minutes);
+      let votingDeadlineAsDate = new Date(startTimeAsUTC + (formikForm.values.timeToVote * 3600000))
+      return votingDeadlineAsDate.toISOString().slice(0, 16).replace('T', ' ');
+    }
+    return '';
+  }
 
   const onSubmit = async () => {
     setCreating(true);
@@ -111,7 +122,7 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
         formikForm.values.country,
         formikForm.values.category,
         dateTimeAsUTC.toString().slice(0, -3),
-        formikForm.values.timeToVote,
+        (formikForm.values.timeToVote * 3600),
         formikForm.values.odd, '/ipfs/' + result.path)
       .send({ from: account, value: formikForm.values.stake })
       .then((res) => handleBetCreated(), (res) => handleRejected())
@@ -300,7 +311,7 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
               </div>
 
               <div className="form-group">
-                <Label htmlFor="timeToVote">Time to vote (In seconds)</Label>
+                <Label htmlFor="timeToVote">Time to vote (In hours)</Label>
                 <Input
                   type="number"
                   name="timeToVote"
@@ -310,10 +321,11 @@ export default function CreateBet({ web3, betContract, account, filters, setFilt
                   error={formikForm.errors.timeToVote}
                   touched={formikForm.touched.timeToVote}
                 />
+                <Label htmlFor="timeToVote" className="ml-3">Voting will end on: {getVotingDeadlineAsDateString()}</Label>
               </div>
 
               <div className="form-group">
-                <button type="submit" className="btn btn-danger">
+                <button type="submit" className="btn btn-info">
                   Create Bet
                 </button>
               </div>

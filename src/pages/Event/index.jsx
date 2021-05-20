@@ -10,6 +10,8 @@ import { countryOptionsArray, categoryOptionsArray } from '../../const/filterMap
 import { GET_BETS } from '../../const/queries';
 import resolveFilterVariablesForQuery from '../../interaction/filterBooleanResolver';
 import { StateToText, STATE_OPEN } from '../../const/contractEnums'
+import EvidenceModal from '../../components/EvidenceModal';
+import genEvidence from '../../interaction/genEvidence';
 
 
 export default function Event({ betContract, arbitratorContract, account, filters, setFilters, archon, ipfsClient }) {
@@ -19,25 +21,33 @@ export default function Event({ betContract, arbitratorContract, account, filter
       variables: resolveFilterVariablesForQuery(filters)
     });
 
-  // MODAL
+  // Transaction MODAL
   ////////////////////////////////
   const history = useHistory();
-  const [show, setShow] = useState(false);
+  const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [transactionSuccess, setTransactionSuccess] = useState(false);
   const [transacting, setTransacting] = useState(false);
   const [transactionError, setTransactionError] = useState(false);
 
+  // Evidence MODAL
+  const [showEvidenceModal, setShowEvidenceModal] = useState(false);
+  const [evidenceSuccess, setEvidenceSuccess] = useState(false);
+  const [evidenceTransacting, setEvidenceTransacting] = useState(false);
+  const [evidenceError, setEvidenceError] = useState(false);
+  const [evidenceBetID, setEvidenceBetID] = useState(-1);
+  const [evidenceInput, setEvidenceInput] = useState("");
+  const [evidenceErrorText, setEvidenceErrorText] = useState("");
 
-  const handleCloseModal = () => {
-    setShow(false);
+  const handleCloseTransactionModal = () => {
+    setShowTransactionModal(false);
     setTransacting(false);
     setTransactionSuccess(false);
     setTransactionError(false);
     refetch(resolveFilterVariablesForQuery(filters));
   }
 
-  const handleOpenModal = () => {
-    setShow(true);
+  const handleOpenTransactionModal = () => {
+    setShowTransactionModal(true);
     setTransacting(true);
     setTransactionSuccess(false);
     setTransactionError(false);
@@ -45,8 +55,20 @@ export default function Event({ betContract, arbitratorContract, account, filter
 
 
   const handleRedirect = () => {
-    setShow(false);
-    refetch(resolveFilterVariablesForQuery(filters));
+    setShowTransactionModal(false);
+    setTransacting(false);
+    setTransactionSuccess(false);
+    setTransactionError(false);
+    setShowEvidenceModal(false);
+    setEvidenceTransacting(false);
+    setEvidenceSuccess(false);
+    setEvidenceError(false);
+    setEvidenceBetID(-1);
+    setEvidenceInput('');
+    setFilters(filters => {
+      filters.eventID = null;
+      return filters;
+    });
     history.push('/');
   };
 
@@ -59,6 +81,44 @@ export default function Event({ betContract, arbitratorContract, account, filter
   const handleTransactionSuccessful = () => {
     setTransacting(false);
     setTransactionSuccess(true);
+  }
+
+  const handleCloseEvidenceModal = () => {
+    setShowEvidenceModal(false);
+    setEvidenceTransacting(false);
+    setEvidenceSuccess(false);
+    setEvidenceError(false);
+    setEvidenceBetID(-1);
+    setEvidenceErrorText('');
+    setEvidenceInput('');
+    refetch(resolveFilterVariablesForQuery(filters));
+  }
+
+  const handleOpenEvidenceModal = (betID) => {
+    setEvidenceBetID(evidenceBetID => {
+      evidenceBetID = betID;
+      return evidenceBetID;
+    });
+    setFilters(filters => {
+      filters.eventID = null;
+      return filters;
+    });
+    setShowEvidenceModal(true);
+    setEvidenceTransacting(false);
+    setEvidenceSuccess(false);
+    setEvidenceError(false);
+    setEvidenceInput('');
+  };
+
+  const handleEvidenceError = (errorText) => {
+    setEvidenceErrorText(errorText);
+    setEvidenceTransacting(false);
+    setEvidenceError(true);
+  }
+
+  const handleEvidenceSuccessful = () => {
+    setEvidenceTransacting(false);
+    setEvidenceSuccess(true);
   }
 
 
@@ -135,7 +195,7 @@ export default function Event({ betContract, arbitratorContract, account, filter
   // Contract call handlers 
   /////////////////////////////////////////////
   const backBetHandler = async (betID, stake) => {
-    handleOpenModal();
+    handleOpenTransactionModal();
     betContract.methods
       .placeBet(betID)
       .send({ from: account, value: stake })
@@ -144,14 +204,14 @@ export default function Event({ betContract, arbitratorContract, account, filter
   }
 
   const voteHandler = async (betID, outcome) => {
-    handleOpenModal();
+    handleOpenTransactionModal();
     betContract.methods
       .voteOnOutcome(betID, outcome)
       .send({ from: account })
       .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
   }
   const disputeBetHandler = async (betID) => {
-    handleOpenModal();
+    handleOpenTransactionModal();
     let arbitrationCost = await arbitratorContract.methods.arbitrationCost("0x00").call();
     betContract.methods
       .createDispute(betID)
@@ -159,20 +219,80 @@ export default function Event({ betContract, arbitratorContract, account, filter
       .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
   }
   const refundBetHandler = async (betID) => {
-    handleOpenModal();
+    handleOpenTransactionModal();
     betContract.methods
       .refund(betID)
       .send({ from: account })
       .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
   }
   const claimWinningsHandler = async (betID) => {
-    handleOpenModal();
+    handleOpenTransactionModal();
     betContract.methods
       .claimWinnings(betID)
       .send({ from: account })
       .then((res) => handleTransactionSuccessful(), (res) => handleTransactionError());
   }
 
+  const handleSubmitEvidence = async () => {
+    //let textBlob = new Blob([evidenceInput], { type: "text/plain;charset=utf-8" });
+    setEvidenceTransacting(true);
+    setEvidenceSuccess(false);
+    setEvidenceError(false);
+    setEvidenceErrorText('');
+
+    let evidenceFileHash = archon.utils.multihashFile(
+      evidenceInput,
+      0x1B // keccak-256
+    );
+
+    let ipfsResultObject;
+    try {
+      ipfsResultObject = await ipfsClient.add(evidenceInput);
+    } catch (e) {
+      console.log(e);
+      handleEvidenceError("Adding evidence to IPFS failed. Check the console log!");
+    }
+    let evidenceFileURI = 'http://localhost:8080/ipfs/' + ipfsResultObject.path;
+    console.log("Evidence file keccak-256 hash: " + evidenceFileHash);
+    console.log("Evidence file IPFS address: " + evidenceFileURI);
+    
+    let evidenceIsValid;
+    await archon.utils.validateFileFromURI(
+      evidenceFileURI,
+      { hash: evidenceFileHash }
+    ).then(data => {
+      evidenceIsValid = data.isValid
+      console.log((data.isValid) ? "Evidence data in IPFS validated succesfully against it's hash!" : "Evidence data in IPFS could not be validated!"); // true
+    })
+
+    if (evidenceIsValid) {
+      let evidenceJSONObject = genEvidence(
+        evidenceFileURI,
+        evidenceFileHash,
+        "txt",
+        "Evidence from: " + account,
+        "Freeform text evidence on the dispute");
+
+      let ipfsResultObjectEvidenceJson;
+      try {
+        ipfsResultObjectEvidenceJson = await ipfsClient.add(JSON.stringify(evidenceJSONObject));
+      } catch (e) {
+        console.log(e);
+        handleEvidenceError("Adding evidence to IPFS failed. Check the console log!");
+      }
+      let evidenceJSONURI = 'http://localhost:8080/ipfs/' + ipfsResultObjectEvidenceJson.path;
+      console.log("Evidence JSON IPFS address: " + evidenceJSONURI);
+
+      betContract.methods
+        .provideEvidence(evidenceBetID, '/ipfs/' + ipfsResultObjectEvidenceJson.path)
+        .send({ from: account })
+        .then((res) => handleEvidenceSuccessful(), (res) => handleEvidenceError("Contract transaction failed!"))
+    } else {
+      handleEvidenceError("Evidence data in IPFS could not be validated againt its hash!");
+    }
+  }
+
+  // Reload data from graph
   const reloadHandler = async () => {
     refetch(resolveFilterVariablesForQuery(filters));
   }
@@ -182,12 +302,12 @@ export default function Event({ betContract, arbitratorContract, account, filter
       <PageCover description={"Search and Back bets"} />
       <div className="col">
         <div className="mt-5 row">
-  
+
           <div className="col-sm-2 ">
             <div className="container">
 
               <div className="btn btn-block mt-3">
-                <Button href="/create-bet" variant="success" block>
+                <Button href="/create-bet" variant="info" block>
                   Create a Bet
                   </Button>
               </div>
@@ -296,22 +416,40 @@ export default function Event({ betContract, arbitratorContract, account, filter
               refundBetHandler={refundBetHandler}
               claimWinningsHandler={claimWinningsHandler}
               filters={filters}
+              handleOpenEvidenceModal={handleOpenEvidenceModal}
             />
 
 
           </div>
         </div>
       </div>
-      <Modal show={show}
-        handleCloseModal={handleCloseModal}
+      <Modal
+        show={showTransactionModal}
+        handleCloseModal={handleCloseTransactionModal}
         handleRedirect={handleRedirect}
-        handleSucceeded={handleCloseModal}
+        handleSucceeded={handleCloseTransactionModal}
         transacting={transacting}
         success={transactionSuccess}
         error={transactionError}
         title={"Transaction"}
         successText={"Transaction successful!"}
         successButtonText={"Close"} />
+
+      <EvidenceModal
+        show={showEvidenceModal}
+        handleSubmitEvidence={handleSubmitEvidence}
+        handleCloseModal={handleCloseEvidenceModal}
+        handleRedirect={handleRedirect}
+        transacting={evidenceTransacting}
+        success={evidenceSuccess}
+        error={evidenceError}
+        errorText={evidenceErrorText}
+        title={"Submit evidence to court"}
+        successText={"Evidence submitted successfully!"}
+        sendTransactionText={"Submit evidence"}
+        input={evidenceInput}
+        setInput={setEvidenceInput}
+      />
     </div>
   );
 }

@@ -21,7 +21,8 @@ export default function EventTable({ betData, error, loading, showBetsHandler })
             </tr>
           </thead>
           <tbody>
-            {betData && betData.data.events.map((event, key) => (
+            {/* Just to be sure that we don't crash */}
+            {(betData && betData.data && betData.data.events) && betData.data.events.map((event, key) => (
               <tr key={key}>
 
                 <td style={{ textAlign: "left" }}>

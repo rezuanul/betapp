@@ -48,7 +48,7 @@ export default function index() {
 
         <div className="row">
           <div className="col">
-            <p className="text-center">© 2021 BetApp</p>
+            <p className="text-center">2021 GambleBoard</p>
           </div>
         </div>
       </div>
